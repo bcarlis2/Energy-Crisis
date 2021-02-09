@@ -1,0 +1,7 @@
+v.0.0.0
+02/08/2021
+"The First Version"
+- Player movement
+- Simple pistol
+- Simple battery draining
+- Rectangle enemy that just faces you
