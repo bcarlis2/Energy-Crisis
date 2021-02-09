@@ -30,15 +30,19 @@ public class Gun : MonoBehaviour
 
     void Start()
     {
-        battery = bm.getBattery(); //Battery Manager will find the battery for the gun
+        battery = bm.getBattery(chargeCost); //Battery Manager will find the battery for the gun
     }
 
 
     void Update()
     {
-        if (Input.GetButtonDown("Fire1") && Time.time >= nextTimeToFire && battery.charge >= chargeCost){
+        if (Input.GetButtonDown("Fire1") && Time.time >= nextTimeToFire && battery.charge >= chargeCost) {
             nextTimeToFire = Time.time + 1f / fireRate; //Sets the next time the gun will be ready to fire
             Shoot();
+        }
+
+        if (Input.GetButtonDown("Reload")) {
+            Reload();
         }
     }
 
@@ -57,5 +61,11 @@ public class Gun : MonoBehaviour
                 hit.rigidbody.AddForce(-hit.normal * impactForce); //If whatever was hit has a rigidbody, push it
             }
         }
+    }
+
+    void Reload() {
+        //Debug.Log("Reloading!");
+
+        battery = bm.getBattery(chargeCost,battery); //Battery Manager will find a battery for the gun
     }
 }

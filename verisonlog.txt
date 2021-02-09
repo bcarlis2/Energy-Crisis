@@ -1,3 +1,12 @@
+V.0.0.1
+02/09/2021
+"The Semi-Working Batteries Version"
+- Multiple batteries can be switched between by reloading
+- An charging field spawns on enemy death
+- The charging field charges left-most battery and properly overflows to the rest
+- Basic colors used to indicate battery's states
+- State issue where, if quickly switching, you can be using a battery while it is charging
+========================================
 v.0.0.0
 02/08/2021
 "The First Version"

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 //TODO: transform.SetSiblingIndex() and transform.GetSiblingIndex()
 public class BatteryManager : MonoBehaviour
@@ -9,29 +10,77 @@ public class BatteryManager : MonoBehaviour
 
     public Battery[] batteries;
     int maxSize = 1;
-    [SerializeField] public ProgressBar[] chargeBars;
+    [SerializeField] public BatteryIcons[] icons;
+    public enum Type {AA, AAA};
+    public enum State {Inventory, InUse, Charging, None};
+    [SerializeField] public Color[] iconColors;
 
     void Start()
-    {
-        batteries = new Battery[maxSize];
-        
-        for (int i=0; i<maxSize; i++) {
-            batteries[i] = transform.GetChild(i).gameObject.GetComponent<Battery>();
+    {   
+        refreshBatteryArray();
+    }
+
+    /*
+        Must be called any time there is a change in the order of batteries, a new battery is added, or a battery is removed
+    */
+    public void refreshBatteryArray() {
+        batteries = GetComponentsInChildren<Battery>(); //Also has a "includeInactive" boolean parameter
+
+        int i=0; 
+        foreach (Battery battery in batteries) { //Assigns each battery an icon in the UI
+            icons[i].battery = battery;
             i++;
         }
+
+        
+        //Debug.Log("Numer of Batteries: " + batteries.Length);
     }
 
 
-    //TODO: Add more charge bars
-    //Updates the UI elements for the batteries
-    void FixedUpdate()
-    {
-        chargeBars[0].SetValue(batteries[0].charge);
-    }
-
-    //TODO: Smarter battery selection
+    //TODO: Should it go to the right?
     //Gets the appropriate battery for the gun requesting it. So far just returns the first one!
-    public Battery getBattery() {
-        return batteries[0];
+    public Battery getBattery(int amountNeeded, Battery oldBattery = null) {
+
+        int i=0; //Really only used for the toString()
+
+        foreach (Battery battery in batteries)
+        {
+            if (battery.checkCharge(amountNeeded) && battery != oldBattery) {
+                //Debug.Log(battery.toString(i));
+                battery.changeState(State.InUse);
+
+                oldBattery?.changeState(State.Inventory); //The question mark checks if the object is null before calling method
+
+                return battery;
+            }
+            i++;
+        }
+
+        return null;
+    }
+
+    /*
+        Returns the battery being charged
+    */
+    public Battery chargeBattery(float amount) {
+        foreach (Battery battery in batteries) {
+            if (battery.canCharge() && battery.state != State.InUse) {
+
+                if (battery.charge + amount > battery.maxCharge) {  //Allows overflow into other batteries. Doesn't return, so it'll look for the next battery
+                    float amountLeft = battery.tilCharged();
+                    battery.chargeIt(amountLeft);
+                    amount -= amountLeft;
+                    //battery.changeState(State.Charging);
+                    Debug.Log("Charged fully, " + amount + "P left");
+                } else {                                            //Will just charge the one battery and return
+                    battery.chargeIt(amount);
+                    //battery.changeState(State.Charging);
+                    Debug.Log("Charged " + amount + "P ");
+                    //break;
+                    return battery;
+                }
+            }
+        }
+        return null;
     }
 }

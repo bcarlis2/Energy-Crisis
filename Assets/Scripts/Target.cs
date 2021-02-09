@@ -5,9 +5,10 @@ using UnityEngine;
 public class Target : MonoBehaviour
 {
     [Space(10)]
-    [Header("Refeerences")]
+    [Header("References")]
     public Transform me;
     public Transform player;
+    public GameObject chargingField;
 
     [Space(10)]
     [Header("Attributes")]
@@ -43,6 +44,7 @@ public class Target : MonoBehaviour
     }
 
     void Die() {
-        Destroy(gameObject);
+        chargingField.SetActive(true);
+        //Destroy(gameObject);
     }
 }

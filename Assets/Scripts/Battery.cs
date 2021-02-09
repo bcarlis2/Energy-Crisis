@@ -4,12 +4,23 @@ using UnityEngine;
 
 public class Battery : MonoBehaviour
 {
-    [SerializeField] public int charge;
-    int maxCharge;
+    [SerializeField] public float charge;
+    public int maxCharge = 100;
+    [SerializeField] public BatteryManager.Type type;
+    [SerializeField] public BatteryManager.State state;
+    //BatteryManager bm;
+
+    //For changing color
+    //private Renderer renderer;
+    //private MaterialPropertyBlock propBlock;
 
     void Start()
     {
-        
+        //bm = GameObject.FindWithTag("BatteryManager").GetComponent<BatteryManager>(); //Might take too long
+        type = BatteryManager.Type.AAA;
+        state = BatteryManager.State.Inventory;
+
+        //renderer = GetComponent<Renderer>();
     }
 
 
@@ -20,5 +31,39 @@ public class Battery : MonoBehaviour
 
     public void use(int amount) {
         charge -= amount;
+
+        if (charge < 0) {
+            Debug.Log("A battery is in the negative??");
+        }
+    }
+
+    public void chargeIt(float amount) {
+        charge += amount;
+
+        if (charge > maxCharge) {
+            Debug.Log("A battery is overcharged??");
+        }
+    }
+
+    public bool checkCharge(int amount) {
+        return (charge >= amount);
+    }
+
+    public bool canCharge() {
+        //Debug.Log("Can Charge...." + (charge < maxCharge));
+        return ((charge < maxCharge));
+    }
+
+    public float tilCharged() {
+        return maxCharge - charge;
+    }
+
+    //Just for debugging so far
+    public string toString(int place = -1) {
+        return ("Battery #" + place + ": " + charge + "/" + maxCharge);
+    }
+
+    public void changeState(BatteryManager.State inState) {
+        state = inState;
     }
 }
