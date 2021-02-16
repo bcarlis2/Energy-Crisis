@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class BatteryIcons : MonoBehaviour
 {
+    public string status; //Just for debugging
     public Battery battery;
     Image image;
     ProgressBar chargeBar;
@@ -24,12 +25,15 @@ public class BatteryIcons : MonoBehaviour
         //Not the best idea
         switch (battery.state) {
             case BatteryManager.State.Inventory:
+                status = "Inventory";
                 image.color = Color.red;
                 break;
             case BatteryManager.State.InUse:
+                status = "Using";
                 image.color = Color.yellow;
                 break;
             case BatteryManager.State.Charging:
+                status = "Charging";
                 image.color = Color.green;
                 break;
             }

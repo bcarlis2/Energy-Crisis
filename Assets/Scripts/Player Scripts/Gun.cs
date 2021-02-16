@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,7 +26,8 @@ public class Gun : MonoBehaviour
     private float nextTimeToFire = 0f; //Has to start at zero
 
     public BatteryManager bm;
-    Battery battery;
+    public Battery battery;
+    Battery oldBattery;
 
     void Start()
     {
@@ -36,7 +37,9 @@ public class Gun : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButtonDown("Fire1") && Time.time >= nextTimeToFire && battery.charge >= chargeCost) {
+        battery?.changeState(BatteryManager.State.InUse); //Just in case it gets changed, may not be needed?
+
+        if (Input.GetButtonDown("Fire1") && Time.time >= nextTimeToFire && battery?.charge >= chargeCost) {
             nextTimeToFire = Time.time + 1f / fireRate; //Sets the next time the gun will be ready to fire
             Shoot();
         }
@@ -50,6 +53,7 @@ public class Gun : MonoBehaviour
         RaycastHit hit;
 
         battery.use(chargeCost);
+        Debug.Log("SHOOTING " + battery.toString());
 
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range )) { //Raycasts forward to the given range
             Target target = hit.transform.GetComponent<Target>(); //Gets the information of the target hit
@@ -64,8 +68,18 @@ public class Gun : MonoBehaviour
     }
 
     void Reload() {
-        //Debug.Log("Reloading!");
-
+        Debug.Log("Reloading!");
+        oldBattery = battery;
         battery = bm.getBattery(chargeCost,battery); //Battery Manager will find a battery for the gun
+
+        if (battery && oldBattery && battery != oldBattery) {
+            //Debug.Log("SWAPPING " + oldBattery.toString() + " FOR " + battery.toString());
+            oldBattery.changeState(BatteryManager.State.Inventory);
+        }
+    }
+
+    //If needed to seperate battery from gun
+    public void removeBattery() {
+        battery = null;
     }
 }

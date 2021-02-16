@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,11 +6,12 @@ public class ChargingField : MonoBehaviour
 {
     BatteryManager bm;
     Battery battery;
+    Battery oldBattery;
     [SerializeField] float chargeAmount = 100f;
     [SerializeField] float seconds = 5;
     float buffer = 0;
     [SerializeField] float intervals = 0.5f;
-    bool charging;
+    bool charging; //Player is in field
     float give = 0f;
 
     void Start()
@@ -26,10 +27,19 @@ public class ChargingField : MonoBehaviour
             //Debug.Log(chargeAmount + "/" + seconds + "=" + give);
             chargeAmount -= give;
 
-            battery?.changeState(BatteryManager.State.Inventory); //Resets the state in case it's not charging again
+            //battery?.changeState(BatteryManager.State.Inventory); //Resets the state in case it's not charging again
 
-            if (charging) {
+            if (charging) { //Player is in field
+                
+                if (battery) {
+                    oldBattery = battery;
+                }
+
                 battery = bm.chargeBattery(give); //Tells the Battery Manager to find a battery and charge it, and returns the battery reference
+
+                if (battery != oldBattery) {
+                    oldBattery?.changeState(BatteryManager.State.Inventory);
+                }
                 battery?.changeState(BatteryManager.State.Charging);
             }
 
@@ -42,6 +52,8 @@ public class ChargingField : MonoBehaviour
             Destroy(transform.parent.gameObject); //Destroys the enemy parent
             Destroy(this.gameObject); //Destroys self
         }
+
+        //Debug.Log("HI:"); //Lol I don't know why I put this here
 
         /*
         if (timeRemaining > 0) {

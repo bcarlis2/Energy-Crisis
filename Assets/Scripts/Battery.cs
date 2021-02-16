@@ -8,6 +8,7 @@ public class Battery : MonoBehaviour
     public int maxCharge = 100;
     [SerializeField] public BatteryManager.Type type;
     [SerializeField] public BatteryManager.State state;
+    public int place = -1;
     //BatteryManager bm;
 
     //For changing color
@@ -59,8 +60,14 @@ public class Battery : MonoBehaviour
     }
 
     //Just for debugging so far
-    public string toString(int place = -1) {
-        return ("Battery #" + place + ": " + charge + "/" + maxCharge);
+    public string toString(int place = -1, string header = "") {
+        this.place = place;
+        return (header + " Battery #" + place + ": " + state);
+        //return ("Battery #" + place + ": " + charge + "/" + maxCharge);
+    }
+
+    public string toString() {
+        return ("Battery #" + place + ": " + state);
     }
 
     public void changeState(BatteryManager.State inState) {

@@ -1,3 +1,12 @@
+V.0.0.2
+2/16/2021
+"The Battery State Solidifier Version"
+- Fixed bug where spamming reload while charging caused battery states to become inaccurate
+- Added a toString to the batteries that is more advanced than needed
+- Reloading with no more batteries to use will still remove battery, so that it can charge
+- Batteries are chosen from left-most, while it may be more natural to have it go towards the right
+- Batteries are stored in basic arrays, may want to overall them in ArrayLists or something similar
+========================================
 V.0.0.1
 02/09/2021
 "The Semi-Working Batteries Version"
