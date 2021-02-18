@@ -3,20 +3,27 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-//TODO: transform.SetSiblingIndex() and transform.GetSiblingIndex()
+//transform.SetSiblingIndex() and transform.GetSiblingIndex() ?
 public class BatteryManager : MonoBehaviour
 {
     [Header("This script goes on an empty BatteryHolder object on the player, with the children being the batteries")]
 
-    public Battery[] batteries;
-    int maxSize = 1;
-    [SerializeField] public BatteryIcons[] icons;
+    public ArrayList batteries;
+    int maxSize;
+    [SerializeField] int numOfBatteries;
+    [SerializeField] public ArrayList icons;
+    [SerializeField] public BatteryIcons icon;
+    [SerializeField] public List<Sprite> sprites;
+    [SerializeField] public Sprite aaaSprite;
+    [SerializeField] public GameObject uiHolder;
     public enum Type {AA, AAA};
     public enum State {Inventory, InUse, Charging, None};
     [SerializeField] public Color[] iconColors;
 
     void Start()
     {   
+        batteries = new ArrayList();
+        icons = new ArrayList();
         refreshBatteryArray();
     }
 
@@ -24,41 +31,109 @@ public class BatteryManager : MonoBehaviour
         Must be called any time there is a change in the order of batteries, a new battery is added, or a battery is removed
     */
     public void refreshBatteryArray() {
-        batteries = GetComponentsInChildren<Battery>(); //Also has a "includeInactive" boolean parameter
 
-        int i=0; 
-        foreach (Battery battery in batteries) { //Assigns each battery an icon in the UI
-            icons[i].battery = battery;
-            i++;
-        }
+        batteries.Clear(); //Clears array
+
+        batteries.AddRange(GetComponentsInChildren<Battery>()); //Adds all batteries that are currently children of BatteryManager, also includes a "includeInactive" boolean parameter
+
+        numOfBatteries = GetComponentsInChildren<Battery>().Length;
+
+        refreshIcons();
 
         
         //Debug.Log("Number of Batteries: " + batteries.Length);
     }
 
+    public void refreshIcons() {
+        icons.Clear();
 
-    //Should it go to the right?
-    //Gets the appropriate battery for the gun requesting it. So far just returns the first one!
+        int spacer=20; //distance between each icon
+        int i=0;
+        foreach (Battery battery in batteries) {
+            GameObject newIcon = new GameObject("BatteryIcon"); //Makes new GameObject
+            Image newImage = newIcon.AddComponent<Image>(); //Makes new Image component
+            newImage.sprite = aaaSprite; //Assigns the sprite according to battery type (currently just gives it AAA)
+            newIcon.GetComponent<RectTransform>().SetParent(uiHolder.transform); //Aligns it with the holder on the Canvas
+            newIcon.GetComponent<RectTransform>().localScale = new Vector3(0.25f,1,1); //Scales icon to look more like a battery
+            newIcon.GetComponent<RectTransform>().localPosition += new Vector3(100+spacer*i,50,0); //Shifts icon
+            newIcon.AddComponent<Slider>();
+            newIcon.AddComponent<ProgressBar>();
+            newIcon.AddComponent<BatteryIcons>();
+            newIcon.GetComponent<BatteryIcons>().setBattery(battery);
+            newIcon.SetActive(true); //Show it!
+            icons.Add(newIcon);
+            i++;
+        }
+    }
+
+    //Gets the appropriate battery for the gun requesting it. Goes to the right
     public Battery getBattery(int amountNeeded, Battery oldBattery = null) {
 
-        int i=1; //Really only used for the toString()
+        int oldIndex;
+        int leftLength;
+        int rightLength;
 
-        foreach (Battery battery in batteries)
-        {
+        if (oldBattery && batteries.Contains(oldBattery)) {
+            oldIndex = batteries.IndexOf(oldBattery);
+            rightLength = numOfBatteries - oldIndex - 1;
+            leftLength = oldIndex;
+        } else {
+            oldIndex = -1;
+            rightLength = numOfBatteries;
+            leftLength = 0;
+        }
+
+        Debug.Log("OLDINDEX " + oldIndex + " RL: " + rightLength + " LL: " + leftLength);
+
+        ArrayList rightBatteries = batteries.GetRange(oldIndex+1,rightLength);
+        Debug.Log("RL: " + rightLength);
+        ArrayList leftBatteries = batteries.GetRange(0,leftLength);
+        Debug.Log(" LL: " + leftLength);
+
+        foreach(Battery battery in rightBatteries) {
             if (battery.checkCharge(amountNeeded) && battery.state == State.Inventory) { //Will only use batteries that can fire at least once and are neither already in use or charging
-                Debug.Log(battery.toString(i,"GETTING"));
+                //Debug.Log(battery.toString(i,"GETTING"));
                 battery.changeState(State.InUse);
 
                 oldBattery?.changeState(State.Inventory); //The question mark checks if the object is null before calling method
 
                 return battery;
             }
-            i++;
+        }
+
+        foreach(Battery battery in leftBatteries) {
+            if (battery.checkCharge(amountNeeded) && battery.state == State.Inventory) { //Will only use batteries that can fire at least once and are neither already in use or charging
+                //Debug.Log(battery.toString(i,"GETTING"));
+                battery.changeState(State.InUse);
+
+                oldBattery?.changeState(State.Inventory); //The question mark checks if the object is null before calling method
+
+                return battery;
+            }
         }
 
         oldBattery?.changeState(State.Inventory); //Can't get new battery, but still taking out old battery
 
         return null;
+
+
+        /* OLD METHOD, JUST GOES FROM INDEX 0 EVERY TIME
+        foreach (Battery battery in batteries)
+        {
+            if (battery.checkCharge(amountNeeded) && battery.state == State.Inventory) { //Will only use batteries that can fire at least once and are neither already in use or charging
+                //Debug.Log(battery.toString(i,"GETTING"));
+                battery.changeState(State.InUse);
+
+                oldBattery?.changeState(State.Inventory); //The question mark checks if the object is null before calling method
+
+                return battery;
+            }
+        }
+
+        oldBattery?.changeState(State.Inventory); //Can't get new battery, but still taking out old battery
+
+        return null;
+        */
     }
 
     /*
@@ -91,5 +166,11 @@ public class BatteryManager : MonoBehaviour
             i++;
         }
         return null;
+    }
+
+    public void unload() { //Unloads all batteries from any guns
+        foreach (Battery battery in batteries) {
+            battery.changeState(State.Inventory);
+        }
     }
 }

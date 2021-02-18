@@ -1,4 +1,12 @@
-V.0.0.2
+v.0.0.3
+2/18/2021
+"The Working Runtime Batteries Version"
+- Changes the batteries to be stored in ArrayLists
+- Changed the battery icons' look and also had them generate entirely at runtime
+- Made reloading batteries go to the right and loop back to the left instead of always starting at index 0
+- Made a physical battery that when picked up adds a new battery that appears in the UI and can be used just like the others
+========================================
+v.0.0.2
 2/16/2021
 "The Battery State Solidifier Version"
 - Fixed bug where spamming reload while charging caused battery states to become inaccurate
@@ -7,11 +15,11 @@ V.0.0.2
 - Batteries are chosen from left-most, while it may be more natural to have it go towards the right
 - Batteries are stored in basic arrays, may want to overall them in ArrayLists or something similar
 ========================================
-V.0.0.1
+v.0.0.1
 02/09/2021
 "The Semi-Working Batteries Version"
 - Multiple batteries can be switched between by reloading
-- An charging field spawns on enemy death
+- A charging field spawns on enemy death
 - The charging field charges left-most battery and properly overflows to the rest
 - Basic colors used to indicate battery's states
 - State issue where, if quickly switching, you can be using a battery while it is charging

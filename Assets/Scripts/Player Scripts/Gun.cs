@@ -47,6 +47,10 @@ public class Gun : MonoBehaviour
         if (Input.GetButtonDown("Reload")) {
             Reload();
         }
+
+        if (Input.GetButtonDown("Unload")) {
+            removeBattery();
+        }
     }
 
     void Shoot() {
@@ -81,5 +85,6 @@ public class Gun : MonoBehaviour
     //If needed to seperate battery from gun
     public void removeBattery() {
         battery = null;
+        bm.unload();
     }
 }

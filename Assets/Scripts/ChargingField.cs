@@ -33,6 +33,8 @@ public class ChargingField : MonoBehaviour
                 
                 if (battery) {
                     oldBattery = battery;
+                } else {
+                    oldBattery = null;
                 }
 
                 battery = bm.chargeBattery(give); //Tells the Battery Manager to find a battery and charge it, and returns the battery reference
