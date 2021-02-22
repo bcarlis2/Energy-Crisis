@@ -10,7 +10,7 @@ public class BatteryManager : MonoBehaviour
 
     public ArrayList batteries;
     int maxSize;
-    [SerializeField] int numOfBatteries;
+    [SerializeField] public int numOfBatteries;
     [SerializeField] public ArrayList icons;
     [SerializeField] public BatteryIcons icon;
     [SerializeField] public List<Sprite> sprites;
@@ -19,6 +19,7 @@ public class BatteryManager : MonoBehaviour
     public enum Type {AA, AAA};
     public enum State {Inventory, InUse, Charging, None};
     [SerializeField] public Color[] iconColors;
+    public int chargeCost = 0;
 
     void Start()
     {   

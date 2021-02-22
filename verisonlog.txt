@@ -1,3 +1,14 @@
+v.0.0.4
+2/21/2021
+"The Give-An-Enemy-A-Brain Version"
+- Added NavMeshComponents
+- Enemies can now patrol, chase, and "attack" player
+- Projectiles are fired, but for now are just decorative
+- Made battery icons turn black if they can no longer be fired, hard-coded the values
+- Added a blue filter for when the player enters a charging field
+- Added a dead model for the enemy
+- Added a limit of 20 on batteries, stress testing needed to tweak this
+========================================
 v.0.0.3
 2/18/2021
 "The Working Runtime Batteries Version"

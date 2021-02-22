@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Target : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class Target : MonoBehaviour
     public Transform me;
     public Transform player;
     public GameObject chargingField;
+    public GameObject deadModel;
+    public EnemyMovement enemyMovement;
+    public NavMeshAgent nma;
 
     [Space(10)]
     [Header("Attributes")]
@@ -22,17 +26,26 @@ public class Target : MonoBehaviour
     void Start()
     {
         health = maxHealth;
+        enemyMovement = GetComponent<EnemyMovement>();
+        chargingField = transform.GetChild(0).gameObject;
+        deadModel = transform.GetChild(1).gameObject;
     }
 
 
     void Update()
     {
+        /* EnemyMovement handles this now
+
+
         float dist = Vector3.Distance(me.position,player.position);
 
         if (Mathf.Abs(dist) <= triggerDistance) {
             Vector3 lookPos = new Vector3(player.position.x, me.position.y, player.position.z);
             transform.LookAt(lookPos);
         }
+
+
+        */
     }
 
     public void TakeDamage(float amount) {
@@ -44,6 +57,10 @@ public class Target : MonoBehaviour
     }
 
     void Die() {
+        enemyMovement.Dying();
+        enemyMovement.enabled = false;
+        deadModel.SetActive(true);
+        GetComponent<Renderer>().enabled = false;
         chargingField.SetActive(true);
         //Destroy(gameObject);
     }

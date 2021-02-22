@@ -13,6 +13,7 @@ public class ChargingField : MonoBehaviour
     [SerializeField] float intervals = 0.5f;
     bool charging; //Player is in field
     float give = 0f;
+    [SerializeField] public GameObject blueFilter;
 
     void Start()
     {
@@ -21,6 +22,7 @@ public class ChargingField : MonoBehaviour
     void Update()
     {
         buffer -= Time.deltaTime;
+        blueFilter.SetActive(charging); //Might get overwritten by other charging fields //TODO: Make sure multiple charging fields doesn't cause flickering
 
         if (buffer <= 0) {
             give = chargeAmount / (seconds / intervals);
@@ -51,6 +53,7 @@ public class ChargingField : MonoBehaviour
 
         if (seconds <= 0) {
             battery?.changeState(BatteryManager.State.Inventory); //Resets the state of the last battery to charge
+            blueFilter.SetActive(false);
             Destroy(transform.parent.gameObject); //Destroys the enemy parent
             Destroy(this.gameObject); //Destroys self
         }
@@ -87,6 +90,7 @@ public class ChargingField : MonoBehaviour
                 bm = other.gameObject.GetComponentInChildren<BatteryManager>();
             }
 
+            blueFilter.SetActive(true);
             charging = true;
 
             //bm.chargeBattery();
@@ -97,6 +101,7 @@ public class ChargingField : MonoBehaviour
     private void OnTriggerExit(Collider other) {
         if (other.gameObject.CompareTag("Player")) {
 
+            blueFilter.SetActive(false);
             charging = false;
             //Debug.Log("Charging Stopped");
         }

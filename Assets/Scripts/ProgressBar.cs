@@ -31,7 +31,9 @@ public class ProgressBar : MonoBehaviour
             float norm = slider.normalizedValue;
             //Debug.Log("FILL COLOR: " + fill.color);
 
-            if (norm <= 0.25) {
+            if (norm < 0.05) {
+                fill.color = Color.black;
+            } else if (norm <= 0.25) {
                 fill.color = Color.red;
             } else if (norm <= 0.5) {
                 fill.color = Color.yellow;
