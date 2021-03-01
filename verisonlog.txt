@@ -1,3 +1,15 @@
+v.0.0.5
+2/28/2021
+"The First-Blood Version"
+- Added a health system to the player
+- Enemies can now shoot and kill the player
+- Player stops moving on death and scene is reloaded
+- Switched out enemy's projectiles for raycasting
+- Added a buffer on raycasting to make the bullet hits varied
+- Added visual elements to the enemies to identify their front, their aim, and their muzzle flash
+- Enemies can now shoot while moving
+- Polished and tweaked the way battery icons switch
+========================================
 v.0.0.4
 2/21/2021
 "The Give-An-Enemy-A-Brain Version"

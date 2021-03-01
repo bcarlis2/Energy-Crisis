@@ -8,6 +8,7 @@ public class ProgressBar : MonoBehaviour
     public Slider slider;
     public Gradient gradient;
     public Image fill;
+    public Color currentColor;
     [SerializeField] float value;
     [SerializeField] float maxValue = 100;
 
@@ -18,29 +19,44 @@ public class ProgressBar : MonoBehaviour
         setMaxValue(maxValue,value);
     }
 
+    public float getValue() {
+        return value;
+    }
 
-    public void SetValue(float value) {
+
+    public void SetValue(float inValue, bool charging) {
         if (slider) {
-            //Debug.Log("SET VALUE " + value + ", MAX " + slider.maxValue);
-            slider.value = value;
+            //Debug.Log("SET VALUE " + inValue + ", MAX " + slider.maxValue);
+            slider.value = inValue;
             this.value = slider.value;
 
             //Displays gradient depending on value
             //fill.color = gradient.Evaluate(slider.normalizedValue);
 
             float norm = slider.normalizedValue;
-            //Debug.Log("FILL COLOR: " + fill.color);
+            Color newColor;
+            //Debug.Log("NORM: " + norm);
 
-            if (norm < 0.05) {
-                fill.color = Color.black;
+            if (charging) {
+                newColor = Color.cyan;
+            } else if (norm < 0.05) {
+                newColor = Color.black;
             } else if (norm <= 0.25) {
-                fill.color = Color.red;
+                newColor = Color.red;
             } else if (norm <= 0.5) {
-                fill.color = Color.yellow;
+                newColor = Color.yellow;
             } else if (norm <= 0.75) {
-                fill.color = Color.magenta;
+                newColor = Color.magenta;
             } else {
-                fill.color = Color.green;
+                newColor = Color.green;
+            }
+
+            if (currentColor == null) {
+                fill.color = newColor;
+                currentColor = newColor;
+            } else if (newColor != currentColor) {
+                fill.color = newColor;
+                currentColor = newColor;
             }
         }
     }
@@ -55,7 +71,7 @@ public class ProgressBar : MonoBehaviour
             slider.maxValue = max;
             slider.value = value;
 
-            SetValue(value);
+            SetValue(value,false);
             //fill.color = gradient.Evaluate(1f); //Max value of the gradient
         }
     }

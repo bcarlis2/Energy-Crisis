@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//TODO: Add reload
 public class Gun : MonoBehaviour
 {
     [Space(10)]
@@ -57,7 +56,7 @@ public class Gun : MonoBehaviour
         RaycastHit hit;
 
         battery.use(chargeCost);
-        Debug.Log("SHOOTING " + battery.toString());
+        //Debug.Log("SHOOTING " + battery.toString());
 
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range )) { //Raycasts forward to the given range
             Target target = hit.transform.GetComponent<Target>(); //Gets the information of the target hit
@@ -72,7 +71,7 @@ public class Gun : MonoBehaviour
     }
 
     void Reload() {
-        Debug.Log("Reloading!");
+        //Debug.Log("Reloading!");
         oldBattery = battery;
         battery = bm.getBattery(chargeCost,battery); //Battery Manager will find a battery for the gun
 

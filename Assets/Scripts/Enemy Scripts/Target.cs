@@ -59,8 +59,15 @@ public class Target : MonoBehaviour
     void Die() {
         enemyMovement.Dying();
         enemyMovement.enabled = false;
+
+        Renderer[] bodyParts = GetComponentsInChildren<Renderer>();
+
+        foreach (Renderer bodyPart in GetComponentsInChildren<Renderer>()) {
+            bodyPart.enabled = false;
+        }
+
         deadModel.SetActive(true);
-        GetComponent<Renderer>().enabled = false;
+        //GetComponent<Renderer>().enabled = false;
         chargingField.SetActive(true);
         //Destroy(gameObject);
     }

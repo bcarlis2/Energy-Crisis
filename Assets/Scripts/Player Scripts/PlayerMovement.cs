@@ -20,17 +20,25 @@ public class PlayerMovement : MonoBehaviour
     public float jumpHeight = 3f;
     public float groundDistance = 0.4f;
 
+    [Space(10)]
+    [Header("Can halt player movement at any time")]
+    public bool canMove = true;
+
 
     Vector3 velocity;
     bool isGrounded;
 
     void Start()
     {
+        canMove = true;
     }
 
     void Update()
     {
-        isGrounded = controller.isGrounded; //Should world and might be faster?
+        if (!canMove)
+            return; //TODO: Make more methods do this
+
+        isGrounded = controller.isGrounded; //Should world and might be faster? //WTF does this comment mean??
         //isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask); //Maybe use this if we have problems with the ground
 
         if (isGrounded && velocity.y < 0) {

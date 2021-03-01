@@ -5,12 +5,15 @@ using UnityEngine.UI;
 
 public class BatteryIcons : MonoBehaviour
 {
-    public string status; //Just for debugging
     [SerializeField] public Battery battery;
     Image image;
     ProgressBar chargeBar;
     [SerializeField] Color[] iconColors;
     RectTransform rt;
+
+    public BatteryManager.State status;
+    public float charge;
+    bool charging = false;
 
     void Start()
     {
@@ -18,7 +21,10 @@ public class BatteryIcons : MonoBehaviour
         chargeBar = GetComponent<ProgressBar>();
         rt = GetComponent<RectTransform>();
         chargeBar.setMaxValue(battery.maxCharge,battery.charge);
-        Debug.Log("SETTED MAX " + battery.maxCharge);
+        //Debug.Log("SETTED MAX " + battery.maxCharge);
+
+        status = BatteryManager.State.None;
+        charge = 0;
     }
 
     public void setBattery(Battery inB) {
@@ -28,25 +34,36 @@ public class BatteryIcons : MonoBehaviour
     //Updates the UI elements for the batteries
     void FixedUpdate()
     {
-        chargeBar.SetValue(battery.charge);
-
-        //Not the best idea
-        switch (battery.state) {
-            case BatteryManager.State.Inventory:
-                status = "Inventory";
-                //image.color = Color.red;
-                rt.localScale = new Vector3(0.25f,1,1);
-                break;
-            case BatteryManager.State.InUse:
-                status = "Using";
-                //image.color = Color.yellow;
-                rt.localScale = new Vector3(0.25f,1.5f,0);
-                break;
-            case BatteryManager.State.Charging:
-                status = "Charging";
-                image.color = Color.cyan;
-                //rt.localScale = new Vector3(0.25f,1.25f,0);
-                break;
+        //Updates BatteryIcon state color
+        BatteryManager.State currentState = battery.state;
+        if (currentState != status) {
+            status = currentState;
+            switch (status) {
+                case BatteryManager.State.Inventory:
+                    charging = false;
+                    //status = "Inventory";
+                    //image.color = Color.white;
+                    rt.localScale = new Vector3(0.25f,1,1);
+                    break;
+                case BatteryManager.State.InUse:
+                    charging = false;
+                    //status = "Using";
+                    //image.color = Color.yellow;
+                    rt.localScale = new Vector3(0.25f,1.5f,0);
+                    break;
+                case BatteryManager.State.Charging:
+                    charging = true;
+                    //status = "Charging";
+                    //image.color = Color.cyan;
+                    //rt.localScale = new Vector3(0.25f,1.25f,0);
+                    break;
             }
+        }
+
+        //Updates BatteryIcon charge value. Just switching every time so that the colors are accurate
+        float currentCharge = battery.charge;
+        charge = currentCharge;
+        chargeBar.SetValue(charge,charging);
+            
     }
 }

@@ -2,6 +2,6 @@
 ## An FPS game about managing energy!
 
 
-v.0.0.4
-"The Give-An-Enemy-A-Brain Version"
-02/21/2021
+v.0.0.5
+"The First-Blood Version"
+02/28/2021

@@ -12,7 +12,7 @@ public class BatteryManager : MonoBehaviour
     int maxSize;
     [SerializeField] public int numOfBatteries;
     [SerializeField] public ArrayList icons;
-    [SerializeField] public BatteryIcons icon;
+    //[SerializeField] public BatteryIcons icon;
     [SerializeField] public List<Sprite> sprites;
     [SerializeField] public Sprite aaaSprite;
     [SerializeField] public GameObject uiHolder;
@@ -20,9 +20,11 @@ public class BatteryManager : MonoBehaviour
     public enum State {Inventory, InUse, Charging, None};
     [SerializeField] public Color[] iconColors;
     public int chargeCost = 0;
+    public GameObject blueFilter;
 
     void Start()
-    {   
+    { 
+        blueFilter = GameObject.FindGameObjectWithTag("Filter");  
         batteries = new ArrayList();
         icons = new ArrayList();
         refreshBatteryArray();
@@ -45,7 +47,11 @@ public class BatteryManager : MonoBehaviour
         //Debug.Log("Number of Batteries: " + batteries.Length);
     }
 
-    public void refreshIcons() {
+    public void refreshIcons() { //TODO: Maybe make this into a prefab instead...
+
+        foreach(GameObject icon in icons) {
+            Destroy(icon);
+        }
         icons.Clear();
 
         int spacer=20; //distance between each icon
@@ -84,12 +90,12 @@ public class BatteryManager : MonoBehaviour
             leftLength = 0;
         }
 
-        Debug.Log("OLDINDEX " + oldIndex + " RL: " + rightLength + " LL: " + leftLength);
+        //Debug.Log("OLDINDEX " + oldIndex + " RL: " + rightLength + " LL: " + leftLength);
 
         ArrayList rightBatteries = batteries.GetRange(oldIndex+1,rightLength);
-        Debug.Log("RL: " + rightLength);
+        //Debug.Log("RL: " + rightLength);
         ArrayList leftBatteries = batteries.GetRange(0,leftLength);
-        Debug.Log(" LL: " + leftLength);
+        //Debug.Log(" LL: " + leftLength);
 
         foreach(Battery battery in rightBatteries) {
             if (battery.checkCharge(amountNeeded) && battery.state == State.Inventory) { //Will only use batteries that can fire at least once and are neither already in use or charging
@@ -124,15 +130,11 @@ public class BatteryManager : MonoBehaviour
             if (battery.checkCharge(amountNeeded) && battery.state == State.Inventory) { //Will only use batteries that can fire at least once and are neither already in use or charging
                 //Debug.Log(battery.toString(i,"GETTING"));
                 battery.changeState(State.InUse);
-
                 oldBattery?.changeState(State.Inventory); //The question mark checks if the object is null before calling method
-
                 return battery;
             }
         }
-
         oldBattery?.changeState(State.Inventory); //Can't get new battery, but still taking out old battery
-
         return null;
         */
     }

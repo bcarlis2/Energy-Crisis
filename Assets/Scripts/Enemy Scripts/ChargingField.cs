@@ -22,7 +22,7 @@ public class ChargingField : MonoBehaviour
     void Update()
     {
         buffer -= Time.deltaTime;
-        blueFilter.SetActive(charging); //Might get overwritten by other charging fields //TODO: Make sure multiple charging fields doesn't cause flickering
+        blueFilter.SetActive(charging); //Might get overwritten by other charging fields
 
         if (buffer <= 0) {
             give = chargeAmount / (seconds / intervals);
@@ -90,6 +90,10 @@ public class ChargingField : MonoBehaviour
                 bm = other.gameObject.GetComponentInChildren<BatteryManager>();
             }
 
+            if (blueFilter == null) {
+                blueFilter = bm.blueFilter;
+            }
+
             blueFilter.SetActive(true);
             charging = true;
 
@@ -103,6 +107,7 @@ public class ChargingField : MonoBehaviour
 
             blueFilter.SetActive(false);
             charging = false;
+            battery?.changeState(BatteryManager.State.Inventory); //Resets the state of the last battery to charge
             //Debug.Log("Charging Stopped");
         }
     }

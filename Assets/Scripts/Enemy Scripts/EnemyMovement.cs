@@ -21,15 +21,17 @@ public class EnemyMovement : MonoBehaviour
     bool alreadyAttacked;
     public bool canAttack;
     public GameObject projectile;
+    public EnemyGun gun;
 
     //States
-    public float sightRange, attackRange;
-    public bool playerInSightRange, playerInAttackRange, dying;
+    public float sightRange, attackRange, stopRange;
+    public bool playerInSightRange, playerInAttackRange, playerInStopRange, dying;
 
 
     private void Awake() {
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+        gun = GetComponentInChildren<EnemyGun>();
         canAttack = true;
     }
 
@@ -40,10 +42,11 @@ public class EnemyMovement : MonoBehaviour
         } else {
             playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
             playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
+            playerInStopRange = Physics.CheckSphere(transform.position, stopRange, whatIsPlayer);
 
-            if (!playerInSightRange && !playerInAttackRange) Patroling();
-            if (playerInSightRange && !playerInAttackRange) ChasePlayer();
-            if (playerInAttackRange && playerInSightRange) AttackPlayer();
+            if (!playerInSightRange && !playerInAttackRange && !playerInStopRange) Patroling();
+            if (playerInSightRange && !playerInAttackRange && !playerInStopRange) ChasePlayer();
+            if (playerInAttackRange && playerInSightRange) AttackPlayer(playerInStopRange);
         }
     }
 
@@ -73,18 +76,32 @@ public class EnemyMovement : MonoBehaviour
         agent.SetDestination(player.position);
     }
 
-    private void AttackPlayer() {
-        //Make sure enemy doesn't move
-        agent.SetDestination(transform.position);
+    private void AttackPlayer(bool stop) {
+        
+        //Make sure enemy doesn't move if player is in stop range
         Vector3 lookPos = new Vector3(player.position.x, transform.position.y, player.position.z);
-        transform.LookAt(lookPos);
+
+        if (stop) {
+            agent.SetDestination(transform.position);
+            transform.LookAt(lookPos);
+        } else {
+            agent.SetDestination(player.position);
+        }
 
         if (!alreadyAttacked && canAttack) {
 
+            /* PHYSICS ROUTE
             //Projectile
-            Rigidbody rb = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
-            rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
-            rb.AddForce(transform.up * 32f, ForceMode.Impulse);
+            Vector3 bulletPos = new Vector3(transform.position.x, transform.position.y - shootOffset, transform.position.z);
+            GameObject bullet = Instantiate(projectile, bulletPos, Quaternion.identity);
+            bullet.GetComponent<EnemyBullet>().thisBullet = bullet; //This is kinda nuts
+            bullet.transform.LookAt(lookPos);
+            Rigidbody rb = bullet.GetComponent<Rigidbody>();
+            rb.AddForce(transform.forward * bulletForce, ForceMode.Impulse);
+            //rb.AddForce(transform.up * 32f, ForceMode.Impulse);
+            */
+
+            gun.shoot(player.position);
 
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
@@ -96,7 +113,6 @@ public class EnemyMovement : MonoBehaviour
     }
 
     public void Dying() {
-        Debug.Log("Enemy dying");
         agent.isStopped = true;
     }
 
