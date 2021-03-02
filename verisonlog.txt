@@ -1,5 +1,15 @@
+v.0.0.6
+03/01/2021
+"The Bless-Your-Eyes Version"
+- Added basic post-processing effects to make the game feel more lively
+- Changed the sprites for batteries and made them visually fill up
+- Changed the way BatteryIcon changes colors
+- Added random scenery models for decoration and to test the NavAgent
+- Added player sprinting (currently unlimited)
+- Multiple performance enhancements within Unity Settings
+========================================
 v.0.0.5
-2/28/2021
+02/28/2021
 "The First-Blood Version"
 - Added a health system to the player
 - Enemies can now shoot and kill the player
@@ -11,7 +21,7 @@ v.0.0.5
 - Polished and tweaked the way battery icons switch
 ========================================
 v.0.0.4
-2/21/2021
+02/21/2021
 "The Give-An-Enemy-A-Brain Version"
 - Added NavMeshComponents
 - Enemies can now patrol, chase, and "attack" player
@@ -22,7 +32,7 @@ v.0.0.4
 - Added a limit of 20 on batteries, stress testing needed to tweak this
 ========================================
 v.0.0.3
-2/18/2021
+02/18/2021
 "The Working Runtime Batteries Version"
 - Changes the batteries to be stored in ArrayLists
 - Changed the battery icons' look and also had them generate entirely at runtime
@@ -30,7 +40,7 @@ v.0.0.3
 - Made a physical battery that when picked up adds a new battery that appears in the UI and can be used just like the others
 ========================================
 v.0.0.2
-2/16/2021
+02/16/2021
 "The Battery State Solidifier Version"
 - Fixed bug where spamming reload while charging caused battery states to become inaccurate
 - Added a toString to the batteries that is more advanced than needed

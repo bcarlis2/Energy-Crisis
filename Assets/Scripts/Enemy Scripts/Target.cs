@@ -21,6 +21,7 @@ public class Target : MonoBehaviour
 
     //[HideInInspector]
     public float health;
+    bool dead = false;
 
 
     void Start()
@@ -51,12 +52,13 @@ public class Target : MonoBehaviour
     public void TakeDamage(float amount) {
         health -= amount;
 
-        if (health <= 0f) {
+        if (health <= 0f && !dead) {
             Die();
         }
     }
 
     void Die() {
+        dead = true;
         enemyMovement.Dying();
         enemyMovement.enabled = false;
 

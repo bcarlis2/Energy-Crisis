@@ -8,10 +8,12 @@ public class Gun : MonoBehaviour
     [Header("Object References")]
     [Tooltip("Use for the Raycast")]
     public Camera fpsCam;
-    [Tooltip("Partical effect for muzzle flash")]
-    public ParticleSystem muzzleFlash;
+    //[Tooltip("Partical effect for muzzle flash")]
+    //public ParticleSystem muzzleFlash;
     [Tooltip("Partical effect for bullet impact")]
     public GameObject impactEffect;
+    [Tooltip("Spotlight used for muzzle flash")]
+    public Light muzzleFlash;
 
     [Space(10)]
     [Header("Gun Attributes")]
@@ -55,6 +57,10 @@ public class Gun : MonoBehaviour
     void Shoot() {
         RaycastHit hit;
 
+        muzzleFlash.enabled = true;
+        Invoke(nameof(turnOffMuzzleFlash),0.2f);
+
+
         battery.use(chargeCost);
         //Debug.Log("SHOOTING " + battery.toString());
 
@@ -85,5 +91,10 @@ public class Gun : MonoBehaviour
     public void removeBattery() {
         battery = null;
         bm.unload();
+    }
+
+    //Turns off the muzzle flash after a short amount of time
+    public void turnOffMuzzleFlash() {
+        muzzleFlash.enabled = false;
     }
 }

@@ -21,6 +21,12 @@ public class PhysicalBattery : MonoBehaviour
         trigger = GetComponent<SphereCollider>();
         rgBody = GetComponent<Rigidbody>();
         appear = GetComponent<Renderer>();
+
+        //Adds outline at runtime
+        var outline = gameObject.AddComponent<Outline>();
+        outline.OutlineMode = Outline.Mode.OutlineVisible;
+        outline.OutlineColor = Color.green;
+        outline.OutlineWidth = 10f;
     }
 
     // Update is called once per frame

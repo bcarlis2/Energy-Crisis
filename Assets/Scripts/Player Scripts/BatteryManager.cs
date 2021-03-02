@@ -13,14 +13,13 @@ public class BatteryManager : MonoBehaviour
     [SerializeField] public int numOfBatteries;
     [SerializeField] public ArrayList icons;
     //[SerializeField] public BatteryIcons icon;
-    [SerializeField] public List<Sprite> sprites;
     [SerializeField] public Sprite aaaSprite;
     [SerializeField] public GameObject uiHolder;
     public enum Type {AA, AAA};
     public enum State {Inventory, InUse, Charging, None};
-    [SerializeField] public Color[] iconColors;
     public int chargeCost = 0;
     public GameObject blueFilter;
+    public GameObject aaaIcon;
 
     void Start()
     { 
@@ -54,9 +53,10 @@ public class BatteryManager : MonoBehaviour
         }
         icons.Clear();
 
-        int spacer=20; //distance between each icon
+        int spacer=35; //distance between each icon
         int i=0;
         foreach (Battery battery in batteries) {
+            /*
             GameObject newIcon = new GameObject("BatteryIcon"); //Makes new GameObject
             Image newImage = newIcon.AddComponent<Image>(); //Makes new Image component
             newImage.sprite = aaaSprite; //Assigns the sprite according to battery type (currently just gives it AAA)
@@ -67,6 +67,15 @@ public class BatteryManager : MonoBehaviour
             newIcon.AddComponent<ProgressBar>();
             newIcon.AddComponent<BatteryIcons>();
             newIcon.GetComponent<BatteryIcons>().setBattery(battery);
+            newIcon.SetActive(true); //Show it!
+            icons.Add(newIcon);
+            i++;
+            */
+            GameObject newIcon = Instantiate(aaaIcon,Vector3.zero,Quaternion.identity);
+            newIcon.GetComponent<RectTransform>().SetParent(uiHolder.transform);
+            newIcon.GetComponent<RectTransform>().localScale = Vector3.one; //Scales icon to (1,1,1)
+            newIcon.GetComponent<RectTransform>().localPosition += new Vector3(50+spacer*i,25,0); //Shifts icon
+            newIcon.GetComponentInChildren<BatteryIcons>().setBattery(battery);
             newIcon.SetActive(true); //Show it!
             icons.Add(newIcon);
             i++;

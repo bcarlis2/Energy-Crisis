@@ -8,7 +8,7 @@ public class BatteryIcons : MonoBehaviour
     [SerializeField] public Battery battery;
     Image image;
     ProgressBar chargeBar;
-    [SerializeField] Color[] iconColors;
+    //[SerializeField] Color[] iconColors;
     RectTransform rt;
 
     public BatteryManager.State status;
@@ -19,7 +19,7 @@ public class BatteryIcons : MonoBehaviour
     {
         image = GetComponent<Image>();
         chargeBar = GetComponent<ProgressBar>();
-        rt = GetComponent<RectTransform>();
+        rt = gameObject.transform.parent.GetComponent<RectTransform>();
         chargeBar.setMaxValue(battery.maxCharge,battery.charge);
         //Debug.Log("SETTED MAX " + battery.maxCharge);
 
@@ -34,8 +34,12 @@ public class BatteryIcons : MonoBehaviour
     //Updates the UI elements for the batteries
     void FixedUpdate()
     {
-        //Updates BatteryIcon state color
+        if (battery == null)
+            return;
+
+        //Updates BatteryIcon state size
         BatteryManager.State currentState = battery.state;
+
         if (currentState != status) {
             status = currentState;
             switch (status) {
@@ -43,19 +47,19 @@ public class BatteryIcons : MonoBehaviour
                     charging = false;
                     //status = "Inventory";
                     //image.color = Color.white;
-                    rt.localScale = new Vector3(0.25f,1,1);
+                    rt.localScale = Vector3.one;
                     break;
                 case BatteryManager.State.InUse:
                     charging = false;
                     //status = "Using";
                     //image.color = Color.yellow;
-                    rt.localScale = new Vector3(0.25f,1.5f,0);
+                    rt.localScale = new Vector3(1,1.5f,1);
                     break;
                 case BatteryManager.State.Charging:
                     charging = true;
                     //status = "Charging";
                     //image.color = Color.cyan;
-                    //rt.localScale = new Vector3(0.25f,1.25f,0);
+                    rt.localScale = Vector3.one;
                     break;
             }
         }

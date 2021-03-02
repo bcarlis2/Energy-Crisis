@@ -18,8 +18,8 @@ TagManager:
   - Ground
   - Player
   - Enemy
-  - 
-  - 
+  - PostProcessing
+  - Scenery
   - 
   - 
   - 
