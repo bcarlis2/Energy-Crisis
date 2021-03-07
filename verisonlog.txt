@@ -1,3 +1,14 @@
+v.0.0.7
+03/06/2021
+"The Melee Madness Version"
+- Added basic melee attack functionality
+- Melee will freeze both the player and target
+- Added a melee charging system
+- Holding the attack will drain battery from target
+- Very simplistic stabbing animation
+- Played around with variables for damage and energy levels
+- Satisfying tests will multiple enemies, though framerate is noticeably slowed
+========================================
 v.0.0.6
 03/01/2021
 "The Bless-Your-Eyes Version"

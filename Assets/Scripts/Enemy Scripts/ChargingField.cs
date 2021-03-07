@@ -11,9 +11,12 @@ public class ChargingField : MonoBehaviour
     [SerializeField] float seconds = 5;
     float buffer = 0;
     [SerializeField] float intervals = 0.5f;
-    bool charging; //Player is in field
+    public bool charging; //Player is in field
     float give = 0f;
     [SerializeField] public GameObject blueFilter;
+
+    //Debugging
+    public float totalCharge = 0;
 
     void Start()
     {
@@ -26,6 +29,7 @@ public class ChargingField : MonoBehaviour
 
         if (buffer <= 0) {
             give = chargeAmount / (seconds / intervals);
+            totalCharge += give;
             //Debug.Log(chargeAmount + "/" + seconds + "=" + give);
             chargeAmount -= give;
 

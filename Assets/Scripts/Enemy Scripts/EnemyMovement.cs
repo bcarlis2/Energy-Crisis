@@ -6,8 +6,11 @@ using UnityEngine.AI;
 public class EnemyMovement : MonoBehaviour
 {
     public NavMeshAgent agent;
+    public Target target;
 
+    public GameObject playerObj;
     public Transform player;
+    public PlayerMelee playerMelee;
 
     public LayerMask whatIsGround, whatIsPlayer;
 
@@ -19,19 +22,26 @@ public class EnemyMovement : MonoBehaviour
     //Attacking
     public float timeBetweenAttacks;
     bool alreadyAttacked;
+    public bool canMove;
     public bool canAttack;
     public GameObject projectile;
     public EnemyGun gun;
 
     //States
-    public float sightRange, attackRange, stopRange;
-    public bool playerInSightRange, playerInAttackRange, playerInStopRange, dying;
+    public float sightRange, attackRange, stopRange, meleeRange;
+    public bool playerInSightRange, playerInAttackRange, playerInStopRange, playerInMeleeRange, meleeable, dying;
 
 
     private void Awake() {
-        player = GameObject.Find("Player").transform;
+        playerObj = GameObject.Find("Player");
+        player = playerObj.transform;
+        playerMelee = playerObj.GetComponent<PlayerMelee>();
+
+        target = GetComponent<Target>();
         agent = GetComponent<NavMeshAgent>();
         gun = GetComponentInChildren<EnemyGun>();
+
+        canMove = true;
         canAttack = true;
     }
 
@@ -43,14 +53,25 @@ public class EnemyMovement : MonoBehaviour
             playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
             playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
             playerInStopRange = Physics.CheckSphere(transform.position, stopRange, whatIsPlayer);
+            playerInMeleeRange = Physics.CheckSphere(transform.position, meleeRange, whatIsPlayer);
 
             if (!playerInSightRange && !playerInAttackRange && !playerInStopRange) Patroling();
             if (playerInSightRange && !playerInAttackRange && !playerInStopRange) ChasePlayer();
             if (playerInAttackRange && playerInSightRange) AttackPlayer(playerInStopRange);
+
+            if (playerInMeleeRange && !meleeable) tellPlayerMelee();
+            if (!playerInMeleeRange && meleeable) stopPlayerMelee();
         }
     }
 
     private void Patroling() {
+
+        if (!canMove) {
+            agent.SetDestination(transform.position); //Stops enemy
+            return;
+        }
+
+
         if (!walkPointSet) SearchWalkPoint();
 
         if (walkPointSet) agent.SetDestination(walkPoint);
@@ -73,10 +94,21 @@ public class EnemyMovement : MonoBehaviour
     }
 
     private void ChasePlayer() {
+
+        if (!canMove) {
+            agent.SetDestination(transform.position); //Stops enemy
+            return;
+        }
+
         agent.SetDestination(player.position);
     }
 
     private void AttackPlayer(bool stop) {
+
+        if (!canMove) {
+            agent.SetDestination(transform.position); //Stops enemy
+            return;
+        }
         
         //Make sure enemy doesn't move if player is in stop range
         Vector3 lookPos = new Vector3(player.position.x, transform.position.y, player.position.z);
@@ -114,6 +146,25 @@ public class EnemyMovement : MonoBehaviour
 
     public void Dying() {
         agent.isStopped = true;
+    }
+
+    private void tellPlayerMelee() {
+        if (playerMelee == null)
+            return;
+
+        meleeable = true;
+        Debug.Log("Telling Player Melee");
+        playerMelee.enabled = true; //Should it turn off if nothing to melee?
+        playerMelee.setTarget(this,target,transform);
+    }
+
+    private void stopPlayerMelee() {
+        if (playerMelee == null)
+            return;
+
+        meleeable = false;
+        Debug.Log("Enemy stopped player melee script");
+        playerMelee.stopMelee();
     }
 
     /*

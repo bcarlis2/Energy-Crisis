@@ -48,6 +48,7 @@ public class PhysicalBattery : MonoBehaviour
                 trigger.enabled = false;
                 realCollider.enabled = false;
                 rgBody.isKinematic = false;
+                rgBody.useGravity = false;
                 appear.enabled = false;
             }
 

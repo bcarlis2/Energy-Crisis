@@ -185,4 +185,17 @@ public class BatteryManager : MonoBehaviour
             battery.changeState(State.Inventory);
         }
     }
+
+    public void chargeSpecificBattery(float amount, Battery inBattery) {
+        if (inBattery.canCharge()) {
+            if (inBattery.charge + amount > inBattery.maxCharge) {
+                float amountLeft = inBattery.tilCharged();
+                inBattery.chargeIt(amountLeft);
+                amount -= amountLeft;
+                chargeBattery(amount); //Charges the other batteries like normal
+            } else {
+                inBattery.chargeIt(amount);
+            }
+        }
+    }
 }

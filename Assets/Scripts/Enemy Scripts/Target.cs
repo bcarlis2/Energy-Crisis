@@ -57,7 +57,7 @@ public class Target : MonoBehaviour
         }
     }
 
-    void Die() {
+    public void Die(bool skipCharge = false) {
         dead = true;
         enemyMovement.Dying();
         enemyMovement.enabled = false;
@@ -67,6 +67,9 @@ public class Target : MonoBehaviour
         foreach (Renderer bodyPart in GetComponentsInChildren<Renderer>()) {
             bodyPart.enabled = false;
         }
+
+        if (skipCharge)
+            return;
 
         deadModel.SetActive(true);
         //GetComponent<Renderer>().enabled = false;
