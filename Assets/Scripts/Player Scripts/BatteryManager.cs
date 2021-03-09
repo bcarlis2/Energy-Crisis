@@ -11,7 +11,8 @@ public class BatteryManager : MonoBehaviour
     public ArrayList batteries;
     int maxSize;
     [SerializeField] public int numOfBatteries;
-    [SerializeField] public ArrayList icons;
+    [SerializeField] public List<GameObject> icons;
+    [SerializeField] public BatteryClicker batteryClicker;
     //[SerializeField] public BatteryIcons icon;
     [SerializeField] public Sprite aaaSprite;
     [SerializeField] public GameObject uiHolder;
@@ -20,19 +21,20 @@ public class BatteryManager : MonoBehaviour
     public int chargeCost = 0;
     public GameObject blueFilter;
     public GameObject aaaIcon;
+    int spacer=35; //distance between each icon
 
     void Start()
     { 
-        blueFilter = GameObject.FindGameObjectWithTag("Filter");  
+        //blueFilter = GameObject.FindGameObjectWithTag("Filter");
+        batteryClicker = GetComponent<BatteryClicker>();
         batteries = new ArrayList();
-        icons = new ArrayList();
+        icons = new List<GameObject>();
         refreshBatteryArray();
     }
 
-    /*
-        Must be called any time there is a change in the order of batteries, a new battery is added, or a battery is removed
-    */
     public void refreshBatteryArray() {
+
+        Debug.Log("!!! REFRESH BATTERY ARRAY !!!");
 
         batteries.Clear(); //Clears array
 
@@ -46,14 +48,16 @@ public class BatteryManager : MonoBehaviour
         //Debug.Log("Number of Batteries: " + batteries.Length);
     }
 
-    public void refreshIcons() { //TODO: Maybe make this into a prefab instead...
+    public void refreshIcons() {
+
+        Debug.Log("!!! REFRESH ICONS !!!");
 
         foreach(GameObject icon in icons) {
             Destroy(icon);
         }
         icons.Clear();
 
-        int spacer=35; //distance between each icon
+        
         int i=0;
         foreach (Battery battery in batteries) {
             /*
@@ -74,8 +78,9 @@ public class BatteryManager : MonoBehaviour
             GameObject newIcon = Instantiate(aaaIcon,Vector3.zero,Quaternion.identity);
             newIcon.GetComponent<RectTransform>().SetParent(uiHolder.transform);
             newIcon.GetComponent<RectTransform>().localScale = Vector3.one; //Scales icon to (1,1,1)
-            newIcon.GetComponent<RectTransform>().localPosition += new Vector3(50+spacer*i,25,0); //Shifts icon
+            newIcon.GetComponent<RectTransform>().localPosition = new Vector3(50+spacer*i,25,0); //Shifts icon
             newIcon.GetComponentInChildren<BatteryIcons>().setBattery(battery);
+            newIcon.GetComponentInChildren<BatteryIcons>().setClicker(batteryClicker);
             newIcon.SetActive(true); //Show it!
             icons.Add(newIcon);
             i++;
@@ -197,5 +202,36 @@ public class BatteryManager : MonoBehaviour
                 inBattery.chargeIt(amount);
             }
         }
+    }
+
+    public void swapBatteries(Battery battery1, Battery battery2) {
+        int loc1, loc2;
+
+        loc1 = batteries.IndexOf(battery1);
+        loc2 = batteries.IndexOf(battery2);
+
+        batteries[loc1] = battery2;
+        batteries[loc2] = battery1;
+        
+        GameObject tempIcon = icons[loc1];
+        icons[loc1] = icons[loc2];
+        icons[loc2] = tempIcon;
+        icons[loc1].GetComponent<RectTransform>().localPosition = new Vector3(50+spacer*loc1,25,0); //Shifts icon1
+        icons[loc2].GetComponent<RectTransform>().localPosition = new Vector3(50+spacer*loc2,25,0); //Shifts icon2
+    }
+
+    public void addBattery(Battery newBattery) { //Lite version of refreshBatteryArray and refreshIcons
+        batteries.Add(newBattery);
+        numOfBatteries = GetComponentsInChildren<Battery>().Length;
+
+        GameObject newIcon = Instantiate(aaaIcon,Vector3.zero,Quaternion.identity);
+        newIcon.GetComponent<RectTransform>().SetParent(uiHolder.transform);
+        newIcon.GetComponent<RectTransform>().localScale = Vector3.one; //Scales icon to (1,1,1)
+        newIcon.GetComponent<RectTransform>().localPosition = new Vector3(50+spacer*icons.Count,25,0); //Shifts icon
+        newIcon.GetComponentInChildren<BatteryIcons>().setBattery(newBattery);
+        newIcon.GetComponentInChildren<BatteryIcons>().setClicker(batteryClicker);
+        newIcon.SetActive(true); //Show it!
+        icons.Add(newIcon);
+
     }
 }

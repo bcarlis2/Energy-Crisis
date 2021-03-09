@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class BatteryIcons : MonoBehaviour
+public class BatteryIcons : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] public Battery battery;
+    [SerializeField] public BatteryClicker bc;
     Image image;
     ProgressBar chargeBar;
+    Button button;
     //[SerializeField] Color[] iconColors;
     RectTransform rt;
 
@@ -19,6 +22,7 @@ public class BatteryIcons : MonoBehaviour
     {
         image = GetComponent<Image>();
         chargeBar = GetComponent<ProgressBar>();
+        button = GetComponent<Button>();
         rt = gameObject.transform.parent.GetComponent<RectTransform>();
         chargeBar.setMaxValue(battery.maxCharge,battery.charge);
         //Debug.Log("SETTED MAX " + battery.maxCharge);
@@ -29,6 +33,10 @@ public class BatteryIcons : MonoBehaviour
 
     public void setBattery(Battery inB) {
         battery = inB;
+    }
+
+    public void setClicker(BatteryClicker inBC) {
+        bc = inBC;
     }
 
     //Updates the UI elements for the batteries
@@ -68,6 +76,10 @@ public class BatteryIcons : MonoBehaviour
         float currentCharge = battery.charge;
         charge = currentCharge;
         chargeBar.SetValue(charge,charging);
-            
+    }
+
+    public void OnPointerClick(PointerEventData eventData) {
+        Debug.Log("Icon Clicked");
+        bc?.newClicked(battery);
     }
 }

@@ -80,7 +80,7 @@ public class ProgressBar : MonoBehaviour
         this.value = value;
 
         if (slider) {
-            Debug.Log("SET MAX " + max);
+            //Debug.Log("SET MAX " + max);
             slider.maxValue = max;
             slider.value = value;
 

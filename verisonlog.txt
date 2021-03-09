@@ -1,3 +1,11 @@
+v.0.0.8
+03/09/2021
+"The Start-The-Switching Version"
+- Added onClick handlers to BatteryIcons
+- Added a simple battery-switching functionaily
+- Added a pause function
+- Improved the efficiency of adding new batteries and their icons
+========================================
 v.0.0.7
 03/06/2021
 "The Melee Madness Version"

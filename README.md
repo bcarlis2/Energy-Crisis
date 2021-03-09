@@ -2,6 +2,6 @@
 ## An FPS game about managing energy!
 
 
-v.0.0.7
-"The Melee Madness Version"
-03/06/2021
+v.0.0.8
+"The Start-The-Switching Version"
+03/09/2021

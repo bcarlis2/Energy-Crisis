@@ -10,6 +10,8 @@ public class MouseLook : MonoBehaviour
     [Header("Player References")]
     public Transform playerBody;
 
+    [SerializeField] public GameObject pauseFilter;
+
     public float mouseSensitivity = 100f;
 
     float xRotation = 0f;
@@ -31,9 +33,13 @@ public class MouseLook : MonoBehaviour
             if (paused) {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
+                pauseFilter.SetActive(true);
+                Time.timeScale = 0;
                 return;
             } else {
                 Cursor.lockState = CursorLockMode.Locked;
+                pauseFilter.SetActive(false);
+                Time.timeScale = 1;
             }
         }
 
