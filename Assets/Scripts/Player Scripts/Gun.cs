@@ -10,10 +10,19 @@ public class Gun : MonoBehaviour
     public Camera fpsCam;
     //[Tooltip("Partical effect for muzzle flash")]
     //public ParticleSystem muzzleFlash;
+    [Tooltip("Used to check pause")]
+    public MouseLook mouseLook;
+    [Tooltip("Slide of gun")]
+    public Transform gunSlide;
     [Tooltip("Partical effect for bullet impact")]
     public GameObject impactEffect;
     [Tooltip("Spotlight used for muzzle flash")]
     public Light muzzleFlash;
+    [Tooltip("Hitmaker")]
+    public Hitmarker hitmarker;
+
+    public enum GunType { Pistol, Shotgun };
+    [SerializeField] public GunType gunType;
 
     [Space(10)]
     [Header("Gun Attributes")]
@@ -30,15 +39,31 @@ public class Gun : MonoBehaviour
     public Battery battery;
     Battery oldBattery;
 
+    private Outline outline;
+
     void Start()
     {
         battery = bm.getBattery(chargeCost); //Battery Manager will find the battery for the gun
+        outline = gameObject.GetComponent<Outline>();
+        outline.enabled = false;
+        hitmarker = transform.parent.parent.parent.GetComponentInChildren<Hitmarker>(); //Looks sketchy
+    }
+
+    void OnEnable() {
+        battery = bm.getBattery(chargeCost); //Battery Manager will find the battery for the gun
+    }
+
+    void OnDisable() {
+        removeBattery();
     }
 
 
     void Update()
     {
         battery?.changeState(BatteryManager.State.InUse); //Just in case it gets changed, may not be needed?
+
+        if (mouseLook.paused)
+            return;
 
         if (Input.GetButtonDown("Fire1") && Time.time >= nextTimeToFire && battery?.charge >= chargeCost) {
             nextTimeToFire = Time.time + 1f / fireRate; //Sets the next time the gun will be ready to fire
@@ -58,6 +83,12 @@ public class Gun : MonoBehaviour
         RaycastHit hit;
 
         muzzleFlash.enabled = true;
+
+        if (gunType == GunType.Pistol) {
+            gunSlide.localPosition = new Vector3(gunSlide.localPosition.x, gunSlide.localPosition.y, gunSlide.localPosition.z +0.02f);
+        } else if (gunType == GunType.Shotgun) {
+            gunSlide.localPosition = new Vector3(gunSlide.localPosition.x, gunSlide.localPosition.y, gunSlide.localPosition.z -0.1f);
+        }
         Invoke(nameof(turnOffMuzzleFlash),0.2f);
 
 
@@ -67,7 +98,7 @@ public class Gun : MonoBehaviour
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range )) { //Raycasts forward to the given range
             Target target = hit.transform.GetComponent<Target>(); //Gets the information of the target hit
             if (target != null) {
-                target.TakeDamage(damage); //Damage the target if there is one
+                dealDamage(target,damage); //Damage the target if there is one
             }
 
             if (hit.rigidbody != null) {
@@ -84,17 +115,31 @@ public class Gun : MonoBehaviour
         if (battery && oldBattery && battery != oldBattery) {
             //Debug.Log("SWAPPING " + oldBattery.toString() + " FOR " + battery.toString());
             oldBattery.changeState(BatteryManager.State.Inventory);
+            //nextTimeToFire = 0f; //No cooldown if you reload?
         }
     }
 
     //If needed to seperate battery from gun
     public void removeBattery() {
         battery = null;
-        bm.unload();
+        //bm.unload();
     }
 
     //Turns off the muzzle flash after a short amount of time
     public void turnOffMuzzleFlash() {
+
+        if (gunType == GunType.Pistol) {
+            gunSlide.localPosition = new Vector3(gunSlide.localPosition.x, gunSlide.localPosition.y, gunSlide.localPosition.z -0.02f);
+        } else if (gunType == GunType.Shotgun) {
+            gunSlide.localPosition = new Vector3(gunSlide.localPosition.x, gunSlide.localPosition.y, gunSlide.localPosition.z +0.1f);
+        }
+
         muzzleFlash.enabled = false;
+    }
+
+    //Any enemy damage event should go through here
+    private void dealDamage(Target target, float damage) {
+        hitmarker.enabled = true;
+        target.TakeDamage(damage);
     }
 }

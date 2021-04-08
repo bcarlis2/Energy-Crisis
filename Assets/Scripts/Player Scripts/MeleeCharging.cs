@@ -16,6 +16,7 @@ using UnityEngine;
 public class MeleeCharging : MonoBehaviour {
     [SerializeField] BatteryManager bm;
     [SerializeField] Gun playerGun;
+    Outline outline;
     [SerializeField] PlayerMelee playerMelee;
     Battery battery;
     Battery oldBattery;
@@ -49,6 +50,8 @@ public class MeleeCharging : MonoBehaviour {
         give = 0f;
 
         startBattery = playerGun.battery;
+        outline = playerGun.gameObject.GetComponent<Outline>();
+        outline.enabled = true;
     }
 
     void Update()
@@ -59,6 +62,9 @@ public class MeleeCharging : MonoBehaviour {
         if (!charging) {
             battery?.changeState(BatteryManager.State.Inventory); //Resets the state of the last battery to charge
             blueFilter.SetActive(false);
+            Debug.Log("Stop Melee from MeleeCharging (No Longer Charging)");
+            playerMelee.stopMelee();
+            outline.enabled = false;
             this.enabled = false;
             return;
         }
@@ -99,7 +105,12 @@ public class MeleeCharging : MonoBehaviour {
             blueFilter.SetActive(false);
             Debug.Log("Stop Melee from MeleeCharging");
             playerMelee.stopMelee();
+            outline.enabled = false;
             this.enabled = false;
         }
+    }
+
+    public void setGun(Gun inGun) {
+        playerGun = inGun;
     }
 }

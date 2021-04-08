@@ -6,7 +6,8 @@ public class WeaponSwitcher : MonoBehaviour
 {
     [Header("This script goes on an empty WeaponHolder object on the player, with the children being the weapons")]
 
-    public int selectedWeapon = 0;
+    [SerializeField] BatteryManager bm;
+    public int selectedWeapon = -1;
 
     void Start()
     {    
@@ -15,6 +16,13 @@ public class WeaponSwitcher : MonoBehaviour
 
     void Update()
     {
+
+        if (transform.childCount < 1)
+            return;
+
+        if (selectedWeapon < 0)
+            selectedWeapon = 0;
+
         int previousSelectedWepaon = selectedWeapon;
 
         if (Input.GetAxis("Mouse ScrollWheel") > 0f) { //Scrolled up
@@ -47,8 +55,14 @@ public class WeaponSwitcher : MonoBehaviour
         }
     }
 
-    void SelectWeapon() {
+    void SelectWeapon(int specific = -1) {
+
+        if (specific >= 0)
+            selectedWeapon = specific;
+        
         int i=0;
+
+        bm.unload(); //Unloads all batteries to avoid confusion
 
         //Goes through the weapon array, activating the chosen weapon and deactivating everything else
         foreach (Transform weapon in transform) {
@@ -59,5 +73,16 @@ public class WeaponSwitcher : MonoBehaviour
             }
             i++;
         }
+    }
+
+    public GameObject getWeapon() {
+        if (selectedWeapon < 0)
+            return null;
+            
+        return transform.GetChild(selectedWeapon).gameObject;
+    }
+
+    public void equipNew() {
+        SelectWeapon(transform.childCount -1);
     }
 }

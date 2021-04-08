@@ -9,14 +9,15 @@ public class MouseLook : MonoBehaviour
 
     [Header("Player References")]
     public Transform playerBody;
+    public BatteryClicker batteryClicker;
 
-    [SerializeField] public GameObject pauseFilter;
+    [SerializeField] public Canvas pauseCanvas;
 
     public float mouseSensitivity = 100f;
 
     float xRotation = 0f;
 
-    bool paused = false;
+    public bool paused = false;
     bool canMove = true;
 
     void Start()
@@ -33,12 +34,15 @@ public class MouseLook : MonoBehaviour
             if (paused) {
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
-                pauseFilter.SetActive(true);
+                pauseCanvas.enabled = true;
+                batteryClicker.enabled = true;
                 Time.timeScale = 0;
                 return;
             } else {
                 Cursor.lockState = CursorLockMode.Locked;
-                pauseFilter.SetActive(false);
+                Cursor.visible = false;
+                pauseCanvas.enabled = false;
+                batteryClicker.enabled = false;
                 Time.timeScale = 1;
             }
         }

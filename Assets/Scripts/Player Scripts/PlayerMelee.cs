@@ -22,15 +22,20 @@ public class PlayerMelee : MonoBehaviour {
     [SerializeField] GameObject meleeUI;
 
     public Transform enemy;
-    public Transform gun;
+    public GameObject gun;
     public EnemyMovement enemyMovement;
 	public Target target;
 
     [SerializeField] PlayerMovement playerMovement;
     [SerializeField] MouseLook mouseLook;
     [SerializeField] MeleeCharging meleeCharging;
+    private WeaponSwitcher weaponSwitcher;
+    private Hitmarker hitmarker;
 
-    bool isStabbing = false;
+    public bool isStabbing = false;
+    bool canStab = true;
+    bool simpleMeleeing = false;
+    bool cantShowUI = false;
     public int stabDamage = 10;
     public int stabWait = 1;
     private float nextTimeToStab = 0f; //Has to start at zero
@@ -44,7 +49,8 @@ public class PlayerMelee : MonoBehaviour {
 
     public void Start()
     {
-        //Hello :)
+        weaponSwitcher = GetComponentInChildren<WeaponSwitcher>();
+        hitmarker = GetComponentInChildren<Hitmarker>();
     }
 
     public void Awake() {
@@ -58,19 +64,33 @@ public class PlayerMelee : MonoBehaviour {
             return;
         }
 
-        if (Input.GetButtonDown("Melee") && Time.time >= nextTimeToStab) {
+        if (!canStab && Time.time >= nextTimeToStab) {
+            canStab = true;
+        }
+
+        if (meleeUI.activeSelf && !canStab) {
+            meleeUI.SetActive(false);
+            cantShowUI = true;
+        }
+
+        if (cantShowUI && canStab) {
+            meleeUI.SetActive(true);
+            cantShowUI = false;
+        }
+
+        if (Input.GetButtonDown("Melee") && canStab && !isStabbing) {
             startMelee();
         }
 
         if (Input.GetButton("Melee") && isStabbing) {
-            if (killingBlow) {
+            if (killingBlow || simpleMeleeing) {
                 keepMelee();
             } else {
-                resetMelee();
+                stopMelee();
             }
         }
 
-        if (Input.GetButtonUp("Melee") && isStabbing) {
+        if (Input.GetButtonUp("Melee") && isStabbing && !simpleMeleeing) {
                 stopMelee();
         }
 
@@ -101,26 +121,37 @@ public class PlayerMelee : MonoBehaviour {
     void startMelee() {
         Debug.Log("Start Melee");
         isStabbing = true;
+        canStab = false;
         
         playerMovement.canMove = false;
         enemyMovement.canMove = false;
         mouseLook.holdMouse();
         mouseLook.playerLookAt(new Vector3(enemy.position.x, transform.position.y, enemy.position.z));
 
-        originalGunLoc = gun.localPosition;
-        gun.position = transform.position + transform.forward * 2f; //Makes gun lunge forward
+        gun = weaponSwitcher.getWeapon();
 
-        if (target.health > stabDamage) { //Just take damage if they're not going to die
-            target.TakeDamage(stabDamage);
+        if (gun) {
+            originalGunLoc = gun.transform.localPosition;
+            gun.transform.position = transform.position + transform.forward * 2f; //Makes gun lunge forward
+        }
+
+        if (target.health > stabDamage || !gun) { //Just take damage if they're not going to die
+            dealDamage(target,stabDamage);
+            simpleMelee();
         } else {
             Debug.Log("Starting Melee Charging...");
             killingBlow = true;
+            meleeCharging.setGun(gun.GetComponent<Gun>());
             meleeCharging.enabled = true;
         }
     }
 
     void keepMelee() {
-        //Debug.Log("Keep Melee");
+    }
+
+    void simpleMelee() {
+        simpleMeleeing = true;
+        Invoke(nameof(stopMelee),0.5f);
     }
 
     public void stopMelee() { //Can stop from the EnemyMovement script if out of range
@@ -133,24 +164,40 @@ public class PlayerMelee : MonoBehaviour {
 
         Debug.Log("Stop Melee");
         isStabbing = false;
+        simpleMeleeing = false;
         meleeCharging.charging = false;
 
-        gun.localPosition = originalGunLoc;
+        if (gun)
+            gun.transform.localPosition = originalGunLoc;
 
         playerMovement.canMove = true;
         enemyMovement.canMove = true;
 
         mouseLook.releaseMouse();
+        resetMelee();
 
         if (killingBlow) {
             target.Die(true);
+            killingBlow = false;
             meleeUI.SetActive(false);
             this.enabled = false;
         }
+        killingBlow = false;
     }
 
     void resetMelee() {
+        canStab = false;
         nextTimeToStab = Time.time + 1f / stabWait; //Sets the next time player can stab
+    }
+
+    //Any enemy damage event should go through here
+    private void dealDamage(Target target, int damage) {
+        hitmarker.enabled = true;
+        target.TakeDamage(damage);
+    }
+
+    public int getDamage() {
+        return stabDamage;
     }
 
     #endregion

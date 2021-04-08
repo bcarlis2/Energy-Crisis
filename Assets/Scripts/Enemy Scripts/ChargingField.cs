@@ -58,7 +58,7 @@ public class ChargingField : MonoBehaviour
         if (seconds <= 0) {
             battery?.changeState(BatteryManager.State.Inventory); //Resets the state of the last battery to charge
             blueFilter.SetActive(false);
-            Destroy(transform.parent.gameObject); //Destroys the enemy parent
+            //Destroy(transform.parent.gameObject); //Destroys the enemy parent
             Destroy(this.gameObject); //Destroys self
         }
 

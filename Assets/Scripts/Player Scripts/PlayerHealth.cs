@@ -21,6 +21,7 @@ public class PlayerHealth : MonoBehaviour {
 	
     [SerializeField] PlayerMovement playerMovement;
     [SerializeField] TextMeshProUGUI healthGUI;
+    PlayerMelee playerMelee;
 
 	int health = 100;
     int maxHealth = 100;
@@ -34,6 +35,7 @@ public class PlayerHealth : MonoBehaviour {
     public void Start()
     {
         health = maxHealth;
+        playerMelee = GetComponent<PlayerMelee>();
     }
 
     public void Update()
@@ -49,6 +51,9 @@ public class PlayerHealth : MonoBehaviour {
     #region Methods
 	
 	public void takeDamage(int damage) {
+
+        if (playerMelee.isStabbing)
+            return;
 
         if (!dead) {
             int tempNewHealth = health - damage;

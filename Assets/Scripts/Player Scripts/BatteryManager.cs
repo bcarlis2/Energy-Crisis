@@ -16,7 +16,7 @@ public class BatteryManager : MonoBehaviour
     //[SerializeField] public BatteryIcons icon;
     [SerializeField] public Sprite aaaSprite;
     [SerializeField] public GameObject uiHolder;
-    public enum Type {AA, AAA};
+    public enum Type {AA, AAA, D};
     public enum State {Inventory, InUse, Charging, None};
     public int chargeCost = 0;
     public GameObject blueFilter;

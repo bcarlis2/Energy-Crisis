@@ -50,6 +50,14 @@ public class Battery : MonoBehaviour
         return (charge >= amount);
     }
 
+    public bool checkType(BatteryManager.Type inType) {
+        return (type == inType);
+    }
+
+    public bool checkMatch(int amount, BatteryManager.Type inType) { //Checks amount and type in one function
+        return (charge >- amount && type == inType);
+    }
+
     public bool canCharge() {
         //Debug.Log("Can Charge...." + (charge < maxCharge));
         return ((charge < maxCharge));

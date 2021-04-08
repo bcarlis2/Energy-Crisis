@@ -1,3 +1,23 @@
+v.0.0.10
+04/08/2021
+"The Almost-Playable Demo Version"
+- Built a starting warehouse setting
+- Placed starting weapon and starting batteries
+- Created shotgun (still uses one battery type)
+- Polished code when enemy dies
+- Smoothed out gun switching
+- Added very pathetic gun animation
+- Added a visual hitmarker
+- Sparse decorations
+========================================
+v.0.0.9
+03/27/2021
+"The Back-To-Business Version"
+- Added a simple bridge, started creating environment
+- Created a UI for being paused
+- Fixed bug where gun can fire when paused
+- Made BatteryClicker refresh on enable
+========================================
 v.0.0.8
 03/09/2021
 "The Start-The-Switching Version"

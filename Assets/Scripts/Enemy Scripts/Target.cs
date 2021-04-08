@@ -22,10 +22,18 @@ public class Target : MonoBehaviour
     //[HideInInspector]
     public float health;
     bool dead = false;
+    bool meleeOutline = false;
+    int playerMeleeDamage;
 
 
     void Start()
     {
+        if (!player) {
+            player = GameObject.Find("Player").transform;
+        }
+
+        playerMeleeDamage = player.gameObject.GetComponent<PlayerMelee>().getDamage();
+
         health = maxHealth;
         enemyMovement = GetComponent<EnemyMovement>();
         chargingField = transform.GetChild(0).gameObject;
@@ -47,6 +55,15 @@ public class Target : MonoBehaviour
 
 
         */
+
+        if (health <= playerMeleeDamage && !meleeOutline) {
+            //Adds outline at runtime
+            var outline = gameObject.AddComponent<Outline>();
+            outline.OutlineMode = Outline.Mode.OutlineVisible;
+            outline.OutlineColor = Color.red;
+            outline.OutlineWidth = 20f;
+            meleeOutline = true;
+        }
     }
 
     public void TakeDamage(float amount) {
@@ -68,12 +85,18 @@ public class Target : MonoBehaviour
             bodyPart.enabled = false;
         }
 
-        if (skipCharge)
-            return;
-
         deadModel.SetActive(true);
+
+        if (!skipCharge) {  //Activates charging field and detatches it. Else, it destroys with this
+            chargingField.SetActive(true);
+            chargingField.transform.SetParent(null);
+        }
+
         //GetComponent<Renderer>().enabled = false;
-        chargingField.SetActive(true);
         //Destroy(gameObject);
+
+        deadModel.transform.SetParent(null); //Detatches dead model
+
+        Destroy(gameObject); //Destroys this and everything left attached to this
     }
 }

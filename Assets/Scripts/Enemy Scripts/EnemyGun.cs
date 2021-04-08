@@ -24,7 +24,7 @@ public class EnemyGun : MonoBehaviour {
     public float bulletRange = 50f;
     public int bulletDamage = 5;
     public float impactForce = 10f;
-    public float maxBuffer = 0.2f;
+    public float maxBuffer = 1f;
 
     #endregion
 
@@ -51,7 +51,7 @@ public class EnemyGun : MonoBehaviour {
             Debug.Log("INSTANT FIRE");
             fire();
         } else {
-            Invoke(nameof(fire),Random.Range(0.0f,buffer)); //Slight variation, some instant hits and some near misses
+            Invoke(nameof(fire),buffer); //Slight variation, some instant hits and some near misses
         }
     }
 
@@ -77,7 +77,7 @@ public class EnemyGun : MonoBehaviour {
             }
         }
     }
-
+    
     private void turnOffMuzzleFlash() {
         muzzleFlash.SetActive(false);
     }

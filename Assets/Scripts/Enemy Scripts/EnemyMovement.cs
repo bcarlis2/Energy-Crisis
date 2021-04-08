@@ -11,6 +11,8 @@ public class EnemyMovement : MonoBehaviour
     public GameObject playerObj;
     public Transform player;
     public PlayerMelee playerMelee;
+    private int playerMeleeDamage;
+    public bool canMeleeDie;
 
     public LayerMask whatIsGround, whatIsPlayer;
 
@@ -21,6 +23,8 @@ public class EnemyMovement : MonoBehaviour
 
     //Attacking
     public float timeBetweenAttacks;
+    float timeBetweenAttacksMin = 1f;
+    float timeBetweenAttacksMax = 5f;
     bool alreadyAttacked;
     public bool canMove;
     public bool canAttack;
@@ -43,25 +47,27 @@ public class EnemyMovement : MonoBehaviour
 
         canMove = true;
         canAttack = true;
+        canMeleeDie = false;
     }
 
     private void Update() {
         //Check for sight and attack range
         if (dying) {
             Dying();
-        } else {
-            playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
-            playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
-            playerInStopRange = Physics.CheckSphere(transform.position, stopRange, whatIsPlayer);
-            playerInMeleeRange = Physics.CheckSphere(transform.position, meleeRange, whatIsPlayer);
-
-            if (!playerInSightRange && !playerInAttackRange && !playerInStopRange) Patroling();
-            if (playerInSightRange && !playerInAttackRange && !playerInStopRange) ChasePlayer();
-            if (playerInAttackRange && playerInSightRange) AttackPlayer(playerInStopRange);
-
-            if (playerInMeleeRange && !meleeable) tellPlayerMelee();
-            if (!playerInMeleeRange && meleeable) stopPlayerMelee();
+            return;
         }
+  
+        playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
+        playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
+        playerInStopRange = Physics.CheckSphere(transform.position, stopRange, whatIsPlayer);
+        playerInMeleeRange = Physics.CheckSphere(transform.position, meleeRange, whatIsPlayer);
+
+        if (!playerInSightRange && !playerInAttackRange && !playerInStopRange) Patroling();
+        if (playerInSightRange && !playerInAttackRange && !playerInStopRange) ChasePlayer();
+        if (playerInAttackRange && playerInSightRange) AttackPlayer(playerInStopRange);
+
+        if (playerInMeleeRange && !meleeable) tellPlayerMelee();
+        if (!playerInMeleeRange && meleeable) stopPlayerMelee();
     }
 
     private void Patroling() {
@@ -136,7 +142,7 @@ public class EnemyMovement : MonoBehaviour
             gun.shoot(player.position);
 
             alreadyAttacked = true;
-            Invoke(nameof(ResetAttack), timeBetweenAttacks);
+            Invoke(nameof(ResetAttack), Random.Range(timeBetweenAttacksMin, timeBetweenAttacksMax));
         }
     }
 
@@ -146,6 +152,7 @@ public class EnemyMovement : MonoBehaviour
 
     public void Dying() {
         agent.isStopped = true;
+        stopPlayerMelee();
     }
 
     private void tellPlayerMelee() {
