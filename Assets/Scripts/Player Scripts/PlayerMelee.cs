@@ -43,6 +43,9 @@ public class PlayerMelee : MonoBehaviour {
 
     Vector3 originalGunLoc;
 
+    [SerializeField] MissionManager mm;
+    public bool tellMM;
+
     #endregion
 
     #region Unity Methods
@@ -183,6 +186,10 @@ public class PlayerMelee : MonoBehaviour {
             this.enabled = false;
         }
         killingBlow = false;
+
+        if (tellMM && mm) {
+            mm.gotMelee();
+        }
     }
 
     void resetMelee() {

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MouseLook : MonoBehaviour
 {
@@ -19,6 +20,10 @@ public class MouseLook : MonoBehaviour
 
     public bool paused = false;
     bool canMove = true;
+
+    bool look = false;
+    Vector3 lookPos;
+    int speed = 10;
 
     void Start()
     {
@@ -47,6 +52,11 @@ public class MouseLook : MonoBehaviour
             }
         }
 
+        if (look) {
+        Quaternion targetRotation = Quaternion.LookRotation(lookPos - transform.position);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, speed * Time.deltaTime);
+        }
+
         if (paused || !canMove)
             return;
         
@@ -61,7 +71,9 @@ public class MouseLook : MonoBehaviour
     }
 
     public void playerLookAt(Vector3 lookPos) { //May break everything
-        transform.LookAt(lookPos);
+        //transform.LookAt(lookPos);
+        this.lookPos = lookPos;
+        look = true;
     }
 
     public void holdMouse() {
@@ -70,5 +82,14 @@ public class MouseLook : MonoBehaviour
 
     public void releaseMouse() {
         canMove = true;
+        look = false;
+    }
+
+    //The Restart button in the pause menu calls this
+    public void restartScene() {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

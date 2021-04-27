@@ -65,6 +65,7 @@ public class EnemyGun : MonoBehaviour {
         transform.LookAt(aimLoc);
 
         muzzleFlash.SetActive(true);
+        AudioManager.instance.Play("EnemyFire");
         Invoke(nameof(turnOffMuzzleFlash),0.2f);
 
         if (Physics.Raycast(transform.position, transform.forward, out hit, bulletRange )) { //Raycasts forward to the given range

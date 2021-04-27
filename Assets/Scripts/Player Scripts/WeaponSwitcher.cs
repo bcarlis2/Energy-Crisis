@@ -7,7 +7,11 @@ public class WeaponSwitcher : MonoBehaviour
     [Header("This script goes on an empty WeaponHolder object on the player, with the children being the weapons")]
 
     [SerializeField] BatteryManager bm;
+    [SerializeField] MissionManager mm;
     public int selectedWeapon = -1;
+    public int totalWeapons = 0;
+    private bool switchCooldown = false;
+    public bool tellMM = false;
 
     void Start()
     {    
@@ -16,6 +20,7 @@ public class WeaponSwitcher : MonoBehaviour
 
     void Update()
     {
+        totalWeapons = transform.childCount; //Probably don't need to check this every frame
 
         if (transform.childCount < 1)
             return;
@@ -25,19 +30,23 @@ public class WeaponSwitcher : MonoBehaviour
 
         int previousSelectedWepaon = selectedWeapon;
 
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f) { //Scrolled up
+        if (Input.GetAxis("Mouse ScrollWheel") > 0f && !switchCooldown) { //Scrolled up
             if (selectedWeapon >= transform.childCount - 1) {
                 selectedWeapon = 0; //Loops around to beginning of the weapon list
             } else {
                 selectedWeapon++; //Weapon to the right
             }
+            switchCooldown = true;
+            Invoke(nameof(refreshSwitch),0.25f);
         }
-        if (Input.GetAxis("Mouse ScrollWheel") < 0f) { //Scrolled down
+        if (Input.GetAxis("Mouse ScrollWheel") < 0f && !switchCooldown) { //Scrolled down
             if (selectedWeapon <= 0) {
                 selectedWeapon = transform.childCount - 1; //Look around to end of the weapon list
             } else {
                 selectedWeapon--; //Weapon to the left
             }
+            switchCooldown = true;
+            Invoke(nameof(refreshSwitch),0.25f);
         }
 
         //Pressing the 1 or 2 key gets the first or second weapon, may expand later
@@ -84,5 +93,13 @@ public class WeaponSwitcher : MonoBehaviour
 
     public void equipNew() {
         SelectWeapon(transform.childCount -1);
+
+        if (tellMM && mm) {
+            mm.gotWeapon();
+        }
+    }
+
+    public void refreshSwitch() {
+        switchCooldown = false;
     }
 }

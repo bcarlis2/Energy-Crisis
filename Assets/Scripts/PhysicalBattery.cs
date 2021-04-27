@@ -38,12 +38,13 @@ public class PhysicalBattery : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player")) {
-            //Debug.Log("BATTERY COLLIDED");
+            Debug.Log("BATTERY COLLIDED");
             bm = other.gameObject.GetComponentInChildren<BatteryManager>();
             if (bm.numOfBatteries < maxBatteries) {
                 transform.SetParent(bm.gameObject.transform); //Gets the Player's GameObject's child's BatteryManager's parent's transform
                 //bm.refreshBatteryArray();
                 bm.addBattery(battery);
+                AudioManager.instance.Play("Bloop");
                 isPhysical = false;
                 //Turn off everything that makes it physical
                 trigger.enabled = false;

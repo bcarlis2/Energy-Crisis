@@ -11,9 +11,10 @@ public class ChargingField : MonoBehaviour
     [SerializeField] float seconds = 5;
     float buffer = 0;
     [SerializeField] float intervals = 0.5f;
-    public bool charging; //Player is in field
+    public bool charging = false; //Player is in field
     float give = 0f;
     [SerializeField] public GameObject blueFilter;
+    private PlayerHealth playerHealth;
 
     //Debugging
     public float totalCharge = 0;
@@ -24,6 +25,10 @@ public class ChargingField : MonoBehaviour
 
     void Update()
     {
+
+        if (playerHealth != null)
+                playerHealth.invinsible = charging;
+
         buffer -= Time.deltaTime;
         blueFilter.SetActive(charging); //Might get overwritten by other charging fields
 
@@ -58,6 +63,10 @@ public class ChargingField : MonoBehaviour
         if (seconds <= 0) {
             battery?.changeState(BatteryManager.State.Inventory); //Resets the state of the last battery to charge
             blueFilter.SetActive(false);
+
+            if (playerHealth != null)
+                playerHealth.invinsible = false;
+            
             //Destroy(transform.parent.gameObject); //Destroys the enemy parent
             Destroy(this.gameObject); //Destroys self
         }
@@ -98,8 +107,14 @@ public class ChargingField : MonoBehaviour
                 blueFilter = bm.blueFilter;
             }
 
+            if (playerHealth == null) {
+                playerHealth = other.gameObject.GetComponentInChildren<PlayerHealth>();
+            }
+
+            playerHealth.invinsible = true;
             blueFilter.SetActive(true);
             charging = true;
+            AudioManager.instance.Play("Charging");
 
             //bm.chargeBattery();
             //Debug.Log("Charging Started");
@@ -109,6 +124,7 @@ public class ChargingField : MonoBehaviour
     private void OnTriggerExit(Collider other) {
         if (other.gameObject.CompareTag("Player")) {
 
+            playerHealth.invinsible = false;
             blueFilter.SetActive(false);
             charging = false;
             battery?.changeState(BatteryManager.State.Inventory); //Resets the state of the last battery to charge

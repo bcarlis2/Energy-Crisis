@@ -27,6 +27,7 @@ public class PlayerHealth : MonoBehaviour {
     int maxHealth = 100;
     int prevHealth = 0;
     bool dead = false;
+    public bool invinsible = false;
 
     #endregion
 
@@ -52,7 +53,7 @@ public class PlayerHealth : MonoBehaviour {
 	
 	public void takeDamage(int damage) {
 
-        if (playerMelee.isStabbing)
+        if (invinsible || playerMelee.isStabbing)
             return;
 
         if (!dead) {
@@ -77,7 +78,7 @@ public class PlayerHealth : MonoBehaviour {
     }
 
     private void restart() {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     #endregion

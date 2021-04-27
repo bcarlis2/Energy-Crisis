@@ -23,6 +23,7 @@ public class Gun : MonoBehaviour
 
     public enum GunType { Pistol, Shotgun };
     [SerializeField] public GunType gunType;
+    public BatteryManager.Type batteryType;
 
     [Space(10)]
     [Header("Gun Attributes")]
@@ -41,16 +42,31 @@ public class Gun : MonoBehaviour
 
     private Outline outline;
 
+    [SerializeField] MissionManager mm;
+    public bool tellMM;
+
     void Start()
     {
-        battery = bm.getBattery(chargeCost); //Battery Manager will find the battery for the gun
+        switch (gunType) {
+            case GunType.Pistol:
+                batteryType = BatteryManager.Type.AAA;
+                break;
+            case GunType.Shotgun:
+                batteryType = BatteryManager.Type.D;
+                break;
+            default:
+                batteryType = BatteryManager.Type.AAA;
+                break;
+        }
+
+        battery = bm.getBattery(batteryType,chargeCost); //Battery Manager will find the battery for the gun
         outline = gameObject.GetComponent<Outline>();
         outline.enabled = false;
         hitmarker = transform.parent.parent.parent.GetComponentInChildren<Hitmarker>(); //Looks sketchy
     }
 
     void OnEnable() {
-        battery = bm.getBattery(chargeCost); //Battery Manager will find the battery for the gun
+        battery = bm.getBattery(batteryType,chargeCost); //Battery Manager will find the battery for the gun
     }
 
     void OnDisable() {
@@ -65,9 +81,13 @@ public class Gun : MonoBehaviour
         if (mouseLook.paused)
             return;
 
-        if (Input.GetButtonDown("Fire1") && Time.time >= nextTimeToFire && battery?.charge >= chargeCost) {
-            nextTimeToFire = Time.time + 1f / fireRate; //Sets the next time the gun will be ready to fire
-            Shoot();
+        if (Input.GetButtonDown("Fire1") && Time.time >= nextTimeToFire) {
+            if (battery?.charge >= chargeCost) {
+                nextTimeToFire = Time.time + 1f / fireRate; //Sets the next time the gun will be ready to fire
+                Shoot();
+            } else {
+                AudioManager.instance.Play("Empty");
+            }
         }
 
         if (Input.GetButtonDown("Reload")) {
@@ -86,8 +106,10 @@ public class Gun : MonoBehaviour
 
         if (gunType == GunType.Pistol) {
             gunSlide.localPosition = new Vector3(gunSlide.localPosition.x, gunSlide.localPosition.y, gunSlide.localPosition.z +0.02f);
+            AudioManager.instance.Play("PistolFire");
         } else if (gunType == GunType.Shotgun) {
             gunSlide.localPosition = new Vector3(gunSlide.localPosition.x, gunSlide.localPosition.y, gunSlide.localPosition.z -0.1f);
+            AudioManager.instance.Play("ShotgunFire");
         }
         Invoke(nameof(turnOffMuzzleFlash),0.2f);
 
@@ -105,17 +127,25 @@ public class Gun : MonoBehaviour
                 hit.rigidbody.AddForce(-hit.normal * impactForce); //If whatever was hit has a rigidbody, push it
             }
         }
+
+        if (tellMM && mm) {
+            mm.gotFire();
+        }
     }
 
     void Reload() {
         //Debug.Log("Reloading!");
         oldBattery = battery;
-        battery = bm.getBattery(chargeCost,battery); //Battery Manager will find a battery for the gun
+        battery = bm.getBattery(batteryType,chargeCost,battery); //Battery Manager will find a battery for the gun
 
         if (battery && oldBattery && battery != oldBattery) {
             //Debug.Log("SWAPPING " + oldBattery.toString() + " FOR " + battery.toString());
             oldBattery.changeState(BatteryManager.State.Inventory);
             //nextTimeToFire = 0f; //No cooldown if you reload?
+        }
+
+        if (tellMM && mm) {
+            mm.gotReload();
         }
     }
 

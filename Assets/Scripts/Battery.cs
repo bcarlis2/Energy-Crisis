@@ -18,7 +18,7 @@ public class Battery : MonoBehaviour
     void Start()
     {
         //bm = GameObject.FindWithTag("BatteryManager").GetComponent<BatteryManager>(); //Might take too long
-        type = BatteryManager.Type.AAA;
+        //type = BatteryManager.Type.AAA;
         state = BatteryManager.State.Inventory;
 
         //renderer = GetComponent<Renderer>();
@@ -54,8 +54,12 @@ public class Battery : MonoBehaviour
         return (type == inType);
     }
 
-    public bool checkMatch(int amount, BatteryManager.Type inType) { //Checks amount and type in one function
-        return (charge >- amount && type == inType);
+    public BatteryManager.Type getType() {
+        return type;
+    }
+
+    public bool checkMatch(BatteryManager.Type inType, int amount) { //Checks type and charge in one function
+        return (charge >= amount && type == inType);
     }
 
     public bool canCharge() {

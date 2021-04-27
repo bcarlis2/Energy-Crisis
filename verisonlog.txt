@@ -1,3 +1,15 @@
+v.0.0.11
+04/26/2021
+"The Given-Purpose Version"
+- Added an objective system and a simple tutorial!
+- Made player and enemy into a prefab to be placed in other scenes
+- Can switch between scenes (without carrying over guns or batteries)
+- Added an audio manager and sound effects!
+- Added D batteries for shotguns
+- Added a flexible enemy spawner to speed up level design
+- Smoothed out melee using "Lerp"
+- Tweaked UI slightly
+========================================
 v.0.0.10
 04/08/2021
 "The Almost-Playable Demo Version"

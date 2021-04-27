@@ -21,7 +21,11 @@ public class BatteryManager : MonoBehaviour
     public int chargeCost = 0;
     public GameObject blueFilter;
     public GameObject aaaIcon;
-    int spacer=35; //distance between each icon
+    public GameObject dIcon;
+    public int spacer = 50; //distance between each icon
+    float leftSpace = 50;
+    [SerializeField] MissionManager mm;
+    public bool tellMM = false;
 
     void Start()
     { 
@@ -50,14 +54,14 @@ public class BatteryManager : MonoBehaviour
 
     public void refreshIcons() {
 
-        Debug.Log("!!! REFRESH ICONS !!!");
+        //Debug.Log("!!! REFRESH ICONS !!!");
 
         foreach(GameObject icon in icons) {
             Destroy(icon);
         }
         icons.Clear();
 
-        
+        leftSpace = 50f;
         int i=0;
         foreach (Battery battery in batteries) {
             /*
@@ -75,10 +79,26 @@ public class BatteryManager : MonoBehaviour
             icons.Add(newIcon);
             i++;
             */
-            GameObject newIcon = Instantiate(aaaIcon,Vector3.zero,Quaternion.identity);
-            newIcon.GetComponent<RectTransform>().SetParent(uiHolder.transform);
-            newIcon.GetComponent<RectTransform>().localScale = Vector3.one; //Scales icon to (1,1,1)
-            newIcon.GetComponent<RectTransform>().localPosition = new Vector3(50+spacer*i,25,0); //Shifts icon
+            GameObject icon;
+
+            switch (battery.getType()) {
+                case BatteryManager.Type.AAA:
+                    icon = aaaIcon;
+                    break;
+                case BatteryManager.Type.D:
+                    icon = dIcon;
+                    break;
+                default:
+                    icon = aaaIcon;
+                    break;
+            }
+
+            GameObject newIcon = Instantiate(icon,Vector3.zero,Quaternion.identity);
+            RectTransform newRect = newIcon.GetComponent<RectTransform>();
+            newRect.SetParent(uiHolder.transform);
+            newRect.localScale = Vector3.one; //Scales icon to (1,1,1)
+            newRect.localPosition = new Vector3(leftSpace+spacer,25,0); //Shifts icon
+            leftSpace += spacer + newRect.rect.width;
             newIcon.GetComponentInChildren<BatteryIcons>().setBattery(battery);
             newIcon.GetComponentInChildren<BatteryIcons>().setClicker(batteryClicker);
             newIcon.SetActive(true); //Show it!
@@ -88,7 +108,7 @@ public class BatteryManager : MonoBehaviour
     }
 
     //Gets the appropriate battery for the gun requesting it. Goes to the right
-    public Battery getBattery(int amountNeeded, Battery oldBattery = null) {
+    public Battery getBattery(BatteryManager.Type type, int amountNeeded, Battery oldBattery = null) {
 
         int oldIndex;
         int leftLength;
@@ -112,9 +132,10 @@ public class BatteryManager : MonoBehaviour
         //Debug.Log(" LL: " + leftLength);
 
         foreach(Battery battery in rightBatteries) {
-            if (battery.checkCharge(amountNeeded) && battery.state == State.Inventory) { //Will only use batteries that can fire at least once and are neither already in use or charging
+            if (battery.checkMatch(type,amountNeeded) && battery.state == State.Inventory) { //Will only use batteries that can fire at least once and are neither already in use or charging
                 //Debug.Log(battery.toString(i,"GETTING"));
                 battery.changeState(State.InUse);
+                AudioManager.instance.Play("Bloop");
 
                 oldBattery?.changeState(State.Inventory); //The question mark checks if the object is null before calling method
 
@@ -123,9 +144,10 @@ public class BatteryManager : MonoBehaviour
         }
 
         foreach(Battery battery in leftBatteries) {
-            if (battery.checkCharge(amountNeeded) && battery.state == State.Inventory) { //Will only use batteries that can fire at least once and are neither already in use or charging
+            if (battery.checkMatch(type,amountNeeded) && battery.state == State.Inventory) { //Will only use batteries that can fire at least once and are neither already in use or charging
                 //Debug.Log(battery.toString(i,"GETTING"));
                 battery.changeState(State.InUse);
+                AudioManager.instance.Play("Bloop");
 
                 oldBattery?.changeState(State.Inventory); //The question mark checks if the object is null before calling method
 
@@ -212,26 +234,50 @@ public class BatteryManager : MonoBehaviour
 
         batteries[loc1] = battery2;
         batteries[loc2] = battery1;
+
+        refreshIcons();
         
+        /*
         GameObject tempIcon = icons[loc1];
         icons[loc1] = icons[loc2];
         icons[loc2] = tempIcon;
         icons[loc1].GetComponent<RectTransform>().localPosition = new Vector3(50+spacer*loc1,25,0); //Shifts icon1
         icons[loc2].GetComponent<RectTransform>().localPosition = new Vector3(50+spacer*loc2,25,0); //Shifts icon2
+        */
     }
 
     public void addBattery(Battery newBattery) { //Lite version of refreshBatteryArray and refreshIcons
         batteries.Add(newBattery);
         numOfBatteries = GetComponentsInChildren<Battery>().Length;
+        
+        GameObject icon;
 
-        GameObject newIcon = Instantiate(aaaIcon,Vector3.zero,Quaternion.identity);
-        newIcon.GetComponent<RectTransform>().SetParent(uiHolder.transform);
-        newIcon.GetComponent<RectTransform>().localScale = Vector3.one; //Scales icon to (1,1,1)
-        newIcon.GetComponent<RectTransform>().localPosition = new Vector3(50+spacer*icons.Count,25,0); //Shifts icon
+        switch (newBattery.getType()) {
+            case BatteryManager.Type.AAA:
+                icon = aaaIcon;
+                break;
+            case BatteryManager.Type.D:
+                icon = dIcon;
+                break;
+            default:
+                icon = aaaIcon;
+                break;
+        }
+
+        GameObject newIcon = Instantiate(icon,Vector3.zero,Quaternion.identity);
+        RectTransform newRect = newIcon.GetComponent<RectTransform>();
+        newRect.SetParent(uiHolder.transform);
+        newRect.localScale = Vector3.one; //Scales icon to (1,1,1)
+        newRect.localPosition = new Vector3(leftSpace+spacer,25,0); //Shifts icon
+        leftSpace += spacer + newRect.rect.width;
         newIcon.GetComponentInChildren<BatteryIcons>().setBattery(newBattery);
         newIcon.GetComponentInChildren<BatteryIcons>().setClicker(batteryClicker);
         newIcon.SetActive(true); //Show it!
         icons.Add(newIcon);
+
+        if (tellMM && mm) {
+            mm.gotBattery();
+        }
 
     }
 }

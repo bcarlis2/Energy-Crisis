@@ -22,7 +22,7 @@ public class Target : MonoBehaviour
     //[HideInInspector]
     public float health;
     bool dead = false;
-    bool meleeOutline = false;
+    public bool meleeOutline = false;
     int playerMeleeDamage;
 
 
@@ -34,7 +34,9 @@ public class Target : MonoBehaviour
 
         playerMeleeDamage = player.gameObject.GetComponent<PlayerMelee>().getDamage();
 
-        health = maxHealth;
+        if (health <= 0)
+            health = maxHealth;
+            
         enemyMovement = GetComponent<EnemyMovement>();
         chargingField = transform.GetChild(0).gameObject;
         deadModel = transform.GetChild(1).gameObject;

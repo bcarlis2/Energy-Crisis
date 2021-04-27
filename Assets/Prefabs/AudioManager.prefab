@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3707362936025747666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3707362936025747660}
+  - component: {fileID: 3707362936025747667}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3707362936025747660
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3707362936025747666}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3707362936025747667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3707362936025747666}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d40c068f9e510146a4ffead97468724, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: PistolFire
+    clip: {fileID: 8300000, guid: 70c97e425596b8142b7b9163256c0868, type: 3}
+    volume: 0.212
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: MeleeCharging
+    clip: {fileID: 8300000, guid: c3aaea08d18c3484599d4b31c232ed4d, type: 3}
+    volume: 0.212
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: ShotgunFire
+    clip: {fileID: 8300000, guid: 929fd214252d7034d93c9463bf63e091, type: 3}
+    volume: 0.212
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Charging
+    clip: {fileID: 8300000, guid: 2b8643998df84a3418f1846a64fc6e66, type: 3}
+    volume: 0.212
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Empty
+    clip: {fileID: 8300000, guid: bc5979cfa11596f409035ec11da31999, type: 3}
+    volume: 0.212
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: Bloop
+    clip: {fileID: 8300000, guid: f0a6f3aedaecaca4aa2e1a9aa96464bf, type: 3}
+    volume: 0.212
+    pitch: 1
+    loop: 0
+    source: {fileID: 0}
+  - name: EnemyFire
+    clip: {fileID: 8300000, guid: e196615aab553a14ab4e1aeb462c195c, type: 3}
+    volume: 0.212
+    pitch: 0.4
+    loop: 0
+    source: {fileID: 0}

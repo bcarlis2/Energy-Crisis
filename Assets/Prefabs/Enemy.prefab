@@ -381,6 +381,7 @@ MonoBehaviour:
   maxHealth: 100
   triggerDistance: 10
   health: 0
+  meleeOutline: 0
 --- !u!195 &2399116079110735569
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -416,7 +417,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 2399116079110735569}
+  target: {fileID: 0}
+  playerObj: {fileID: 0}
   player: {fileID: 0}
+  playerMelee: {fileID: 0}
+  canMeleeDie: 0
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
@@ -427,15 +432,19 @@ MonoBehaviour:
   walkPointSet: 0
   walkPointRange: 12
   timeBetweenAttacks: 2
+  canMove: 0
   canAttack: 0
   projectile: {fileID: 0}
   gun: {fileID: 0}
   sightRange: 20
   attackRange: 5
   stopRange: 0
+  meleeRange: 0
   playerInSightRange: 0
   playerInAttackRange: 0
   playerInStopRange: 0
+  playerInMeleeRange: 0
+  meleeable: 0
   dying: 0
 --- !u!1 &2399116079156601477
 GameObject:
@@ -450,7 +459,7 @@ GameObject:
   - component: {fileID: 2399116079156601473}
   - component: {fileID: 2399116079156601472}
   - component: {fileID: 2399116079156601479}
-  m_Layer: 10
+  m_Layer: 2
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -548,7 +557,9 @@ MonoBehaviour:
   chargeAmount: 457.97
   seconds: 16.23
   intervals: 0.2
+  charging: 0
   blueFilter: {fileID: 0}
+  totalCharge: 0
 --- !u!1 &2440557222441890647
 GameObject:
   m_ObjectHideFlags: 0

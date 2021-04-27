@@ -95,7 +95,8 @@ public class EnemyMovement : MonoBehaviour
 
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
 
-        if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround))
+        if (Physics.Raycast(walkPoint, -transform.up, 3f, whatIsGround))
+            //Debug.Log("Walkpoint Found"); 
             walkPointSet = true;
     }
 
@@ -159,6 +160,13 @@ public class EnemyMovement : MonoBehaviour
         if (playerMelee == null)
             return;
 
+        //If the player already has a melee target, prioritize whoever is one-hit away and then whoever is closest
+        if (playerMelee.enabled && playerMelee.enemyMovement != null && !target.meleeOutline) {
+            if (this.getDistanceToPlayer() >= playerMelee.enemyMovement.getDistanceToPlayer()) {
+                return;
+            }
+        }
+
         meleeable = true;
         Debug.Log("Telling Player Melee");
         playerMelee.enabled = true; //Should it turn off if nothing to melee?
@@ -172,6 +180,10 @@ public class EnemyMovement : MonoBehaviour
         meleeable = false;
         Debug.Log("Enemy stopped player melee script");
         playerMelee.stopMelee();
+    }
+
+    public float getDistanceToPlayer() {
+        return Vector3.Distance(player.position, transform.position);
     }
 
     /*
