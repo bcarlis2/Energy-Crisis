@@ -22,12 +22,15 @@ public class PlayerHealth : MonoBehaviour {
     [SerializeField] PlayerMovement playerMovement;
     [SerializeField] TextMeshProUGUI healthGUI;
     PlayerMelee playerMelee;
+    Color[] healthColors = new Color[3];
 
 	int health = 100;
     int maxHealth = 100;
     int prevHealth = 0;
     bool dead = false;
     public bool invinsible = false;
+    public float iframesTime = 0.5f;
+    bool iframes = false;
 
     #endregion
 
@@ -37,12 +40,16 @@ public class PlayerHealth : MonoBehaviour {
     {
         health = maxHealth;
         playerMelee = GetComponent<PlayerMelee>();
+
+        healthColors[0] = Color.white;
+        healthColors[1] = new Color(1,0.6f,0.2f); //Orange
+        healthColors[2] = Color.red;
     }
 
     public void Update()
     {
         if (health != prevHealth) { //Trying to not update the text every frame if nothing changes
-            healthGUI.SetText("Health: " + health + "/" + maxHealth);
+            healthGUI.SetText(health + "");
         }
         prevHealth = health;
     }
@@ -50,21 +57,59 @@ public class PlayerHealth : MonoBehaviour {
     #endregion
 
     #region Methods
+
+    public void setHealth(int inHealth) {
+        health = inHealth;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public bool isFull() {
+        return health == maxHealth;
+    }
+
+    public void giveHealth(int amount) {
+        if ((health + amount) > maxHealth) {
+            setHealth(maxHealth);
+            return;
+        }
+        setHealth(health + amount);
+    }
 	
 	public void takeDamage(int damage) {
 
-        if (invinsible || playerMelee.isStabbing)
+        if (iframes || invinsible || playerMelee.isStabbing)
             return;
 
         if (!dead) {
             int tempNewHealth = health - damage;
 
+            //Simple color animation
+            healthGUI.color = healthColors[1];
+            Invoke(nameof(setHealthColor),0.5f);
+
             if (tempNewHealth > 0) {    //Simple damage
                 health = tempNewHealth;
+                iframes = true;
+                Invoke(nameof(restIFrames),iframesTime);
             } else {                    //Death
                 die();
             }
         }
+    }
+
+    private void setHealthColor() {
+        if (health > 25) {
+            healthGUI.color = healthColors[0];
+        } else {
+            healthGUI.color = healthColors[2];
+        }
+    }
+
+    private void restIFrames() {
+        iframes = false;
     }
 
     private void die() {
@@ -78,7 +123,9 @@ public class PlayerHealth : MonoBehaviour {
     }
 
     private void restart() {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        //SaveData.instance?.Load();
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene("SampleScene");
     }
 
     #endregion

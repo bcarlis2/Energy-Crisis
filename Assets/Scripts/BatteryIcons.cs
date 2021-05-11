@@ -16,6 +16,8 @@ public class BatteryIcons : MonoBehaviour, IPointerClickHandler
 
     public BatteryManager.State status;
     public float charge;
+    public float position;
+    public float width;
     bool charging = false;
 
     void Start()
@@ -37,6 +39,14 @@ public class BatteryIcons : MonoBehaviour, IPointerClickHandler
 
     public void setClicker(BatteryClicker inBC) {
         bc = inBC;
+    }
+
+    public void setPosition(float inPos) {
+        position = inPos;
+    }
+
+    public void setWidth(float inWidth) {
+        width = inWidth;
     }
 
     //Updates the UI elements for the batteries
@@ -67,7 +77,7 @@ public class BatteryIcons : MonoBehaviour, IPointerClickHandler
                     charging = true;
                     //status = "Charging";
                     //image.color = Color.cyan;
-                    rt.localScale = Vector3.one;
+                    //rt.localScale = Vector3.one; //Charging will take on the same size as the previous state
                     break;
             }
         }

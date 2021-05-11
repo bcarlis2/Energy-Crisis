@@ -7,7 +7,7 @@ public class WeaponSwitcher : MonoBehaviour
     [Header("This script goes on an empty WeaponHolder object on the player, with the children being the weapons")]
 
     [SerializeField] BatteryManager bm;
-    [SerializeField] MissionManager mm;
+    [SerializeField] public MissionManager mm;
     public int selectedWeapon = -1;
     public int totalWeapons = 0;
     private bool switchCooldown = false;
@@ -47,6 +47,10 @@ public class WeaponSwitcher : MonoBehaviour
             }
             switchCooldown = true;
             Invoke(nameof(refreshSwitch),0.25f);
+        }
+
+        if (Input.GetButtonDown("FillAll")) {
+            bm.fillAllBatteries();
         }
 
         //Pressing the 1 or 2 key gets the first or second weapon, may expand later
@@ -101,5 +105,11 @@ public class WeaponSwitcher : MonoBehaviour
 
     public void refreshSwitch() {
         switchCooldown = false;
+    }
+
+    public void clearWeapons() {
+        foreach (Transform weapon in transform) {
+            Destroy(weapon.gameObject);
+        }
     }
 }

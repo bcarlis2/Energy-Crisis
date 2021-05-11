@@ -14,38 +14,51 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Door : MonoBehaviour {
+public class Door : Interactable {
 
 	#region Variables
 	
-	
+    [SerializeField] public bool loadScene = false;
+    public string scene = "Alleyway";
+    public bool secondLoc = false;
+    public bool changeMissions = true;
+    [SerializeField] public bool warehouseDoor;
 
     #endregion
 
-    #region Unity Methods
-
-    public void Start()
-    {
-        //Hello :)
-    }
-
-    public void Update()
-    {
-        //You're doing great!
-    }
-
-    #endregion
 
     #region Methods
 	
-	    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player")) {
-            Debug.Log("OPEN DOOR");
+    //public override void enterInfo(PlayerInteract playerInteract) {
+    //    playerInteract.openInteractGUI(this);
+    //}
 
-            SceneManager.LoadScene("Alleyway");
+    public override void interact() {
+        base.interact();
 
+        if (warehouseDoor && base.playerMovement.secondSpawn) {
+            Transform secondSpawnLoc = GameObject.FindGameObjectWithTag("SecondSpawn").transform;
+            base.playerMovement.transform.position = secondSpawnLoc.position; //Places the player at the roof
+            base.playerMovement.transform.rotation = secondSpawnLoc.rotation;
+            return;
+            //secondSpawn = false;
         }
+
+        if (loadScene) {
+            SaveData.instance?.Save();
+
+            //base.playerMovement.setSpawn(scene,secondLoc);
+            base.playerMovement.secondSpawn = secondLoc;
+            base.playerMovement.changeMissions = changeMissions;
+            SceneManager.LoadScene(scene);
+        }
+
+
+        if (GetComponent<DoorAnimation>() != null) {
+            GetComponent<DoorAnimation>().enabled = true;
+        }
+
+        this.enabled = false;
     }
 
     #endregion

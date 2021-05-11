@@ -28,7 +28,7 @@ public class PlayerMelee : MonoBehaviour {
 
     [SerializeField] PlayerMovement playerMovement;
     [SerializeField] MouseLook mouseLook;
-    [SerializeField] MeleeCharging meleeCharging;
+    [SerializeField] public MeleeCharging meleeCharging;
     private WeaponSwitcher weaponSwitcher;
     private Hitmarker hitmarker;
 
@@ -43,7 +43,7 @@ public class PlayerMelee : MonoBehaviour {
 
     Vector3 originalGunLoc;
 
-    [SerializeField] MissionManager mm;
+    [SerializeField] public MissionManager mm;
     public bool tellMM;
 
     #endregion
@@ -144,6 +144,7 @@ public class PlayerMelee : MonoBehaviour {
         } else {
             Debug.Log("Starting Melee Charging...");
             killingBlow = true;
+            dealDamage(target,stabDamage);
             meleeCharging.setGun(gun.GetComponent<Gun>());
             meleeCharging.enabled = true;
         }
@@ -186,10 +187,6 @@ public class PlayerMelee : MonoBehaviour {
             this.enabled = false;
         }
         killingBlow = false;
-
-        if (tellMM && mm) {
-            mm.gotMelee();
-        }
     }
 
     void resetMelee() {
@@ -200,6 +197,16 @@ public class PlayerMelee : MonoBehaviour {
     //Any enemy damage event should go through here
     private void dealDamage(Target target, int damage) {
         hitmarker.enabled = true;
+
+        if (target.health <= damage) {
+            if (tellMM && mm) {
+                Debug.Log("Melee Killed Target");
+                mm.killedEnemy();
+            }
+            return; //Don't actually kill the target until melee is done
+        }
+
+
         target.TakeDamage(damage);
     }
 

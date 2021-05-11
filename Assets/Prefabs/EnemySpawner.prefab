@@ -113,5 +113,7 @@ MonoBehaviour:
   zPos: 0
   xRange: 0
   zRange: 0
-  enemyCount: 0
   maxEnemies: 100
+  mm: {fileID: 0}
+  tellMM: 0
+  liveEnemies: 0

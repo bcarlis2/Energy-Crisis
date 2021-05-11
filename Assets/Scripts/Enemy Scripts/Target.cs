@@ -13,6 +13,8 @@ public class Target : MonoBehaviour
     public GameObject deadModel;
     public EnemyMovement enemyMovement;
     public NavMeshAgent nma;
+    [SerializeField] MissionManager mm;
+    public bool tellMM;
 
     [Space(10)]
     [Header("Attributes")]
@@ -32,13 +34,17 @@ public class Target : MonoBehaviour
             player = GameObject.Find("Player").transform;
         }
 
-        playerMeleeDamage = player.gameObject.GetComponent<PlayerMelee>().getDamage();
+        PlayerMelee pm = player.gameObject.GetComponent<PlayerMelee>();
+
+        playerMeleeDamage = pm.getDamage();
+        mm = player.gameObject.GetComponent<MissionManager>();
 
         if (health <= 0)
             health = maxHealth;
             
         enemyMovement = GetComponent<EnemyMovement>();
         chargingField = transform.GetChild(0).gameObject;
+        chargingField.GetComponent<ChargingField>().setFilter(pm.meleeCharging.blueFilter);
         deadModel = transform.GetChild(1).gameObject;
     }
 
@@ -76,7 +82,8 @@ public class Target : MonoBehaviour
         }
     }
 
-    public void Die(bool skipCharge = false) {
+    public void Die(bool skipCharge = false) { //Will count as player kill (maybe)
+
         dead = true;
         enemyMovement.Dying();
         enemyMovement.enabled = false;
@@ -99,6 +106,26 @@ public class Target : MonoBehaviour
 
         deadModel.transform.SetParent(null); //Detatches dead model
 
-        Destroy(gameObject); //Destroys this and everything left attached to this
+        if (tellMM && mm) {
+            Debug.Log("Target telling MM that it killed it");
+            mm.killedEnemy();
+            Invoke(nameof(destroyBuffer),0.5f); //Maybe that'll force the method to run
+        } else {
+            Destroy(gameObject); //Destroys this and everything left attached to this
+        }
+    }
+
+    private void destroyBuffer() {
+        Destroy(gameObject);
+    }
+
+    void OnDestroy() {
+        if (!dead) 
+            return; //Hopefully the "dead" variable only gets activated if player kills it
+
+        if (tellMM && mm) {
+            Debug.Log("Final Destroy");
+            //mm.killedEnemy();
+        }
     }
 }

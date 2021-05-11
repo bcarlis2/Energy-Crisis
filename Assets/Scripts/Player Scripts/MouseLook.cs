@@ -90,6 +90,8 @@ public class MouseLook : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         Time.timeScale = 1;
+        //SaveData.instance?.ClearAll();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SaveData.instance?.Load();
     }
 }

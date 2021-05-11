@@ -13,6 +13,8 @@ public class EnemyMovement : MonoBehaviour
     public PlayerMelee playerMelee;
     private int playerMeleeDamage;
     public bool canMeleeDie;
+    MissionManager mm;
+    public bool tellMM;
 
     public LayerMask whatIsGround, whatIsPlayer;
 
@@ -40,6 +42,7 @@ public class EnemyMovement : MonoBehaviour
         playerObj = GameObject.Find("Player");
         player = playerObj.transform;
         playerMelee = playerObj.GetComponent<PlayerMelee>();
+        mm = playerObj.GetComponentInChildren<MissionManager>();
 
         target = GetComponent<Target>();
         agent = GetComponent<NavMeshAgent>();
@@ -154,6 +157,11 @@ public class EnemyMovement : MonoBehaviour
     public void Dying() {
         agent.isStopped = true;
         stopPlayerMelee();
+
+        if (tellMM && mm) {
+            Debug.Log("Enemy killed, and it's telling MM itself");
+            mm.killedEnemy();
+        }
     }
 
     private void tellPlayerMelee() {

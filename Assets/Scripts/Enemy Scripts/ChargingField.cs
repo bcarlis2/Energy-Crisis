@@ -26,11 +26,12 @@ public class ChargingField : MonoBehaviour
     void Update()
     {
 
-        if (playerHealth != null)
-                playerHealth.invinsible = charging;
+        //if (playerHealth != null)
+        //       playerHealth.invinsible = charging;
 
         buffer -= Time.deltaTime;
-        blueFilter.SetActive(charging); //Might get overwritten by other charging fields
+        if (blueFilter)
+            blueFilter.SetActive(charging); //Might get overwritten by other charging fields
 
         if (buffer <= 0) {
             give = chargeAmount / (seconds / intervals);
@@ -51,7 +52,8 @@ public class ChargingField : MonoBehaviour
                 battery = bm.chargeBattery(give); //Tells the Battery Manager to find a battery and charge it, and returns the battery reference
 
                 if (battery != oldBattery) {
-                    oldBattery?.changeState(BatteryManager.State.Inventory);
+                    Debug.Log("Charging Field: Not the same battery");
+                    oldBattery?.changeBackState();
                 }
                 battery?.changeState(BatteryManager.State.Charging);
             }
@@ -61,8 +63,9 @@ public class ChargingField : MonoBehaviour
         }
 
         if (seconds <= 0) {
-            battery?.changeState(BatteryManager.State.Inventory); //Resets the state of the last battery to charge
-            blueFilter.SetActive(false);
+            battery?.changeBackState(); //Resets the state of the last battery to charge
+            if (blueFilter)
+                blueFilter.SetActive(false);
 
             if (playerHealth != null)
                 playerHealth.invinsible = false;
@@ -114,7 +117,7 @@ public class ChargingField : MonoBehaviour
             playerHealth.invinsible = true;
             blueFilter.SetActive(true);
             charging = true;
-            AudioManager.instance.Play("Charging");
+            AudioManager.instance?.Play("Charging");
 
             //bm.chargeBattery();
             //Debug.Log("Charging Started");
@@ -127,8 +130,12 @@ public class ChargingField : MonoBehaviour
             playerHealth.invinsible = false;
             blueFilter.SetActive(false);
             charging = false;
-            battery?.changeState(BatteryManager.State.Inventory); //Resets the state of the last battery to charge
+            battery?.changeBackState(); //Resets the state of the last battery to charge
             //Debug.Log("Charging Stopped");
         }
+    }
+
+    public void setFilter(GameObject filter) {
+        blueFilter = filter;
     }
 }

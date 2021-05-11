@@ -6,6 +6,9 @@ TagManager:
   tags:
   - BatteryManager
   - Filter
+  - TextObjective
+  - SecondSpawn
+  - Enemy
   layers:
   - Default
   - TransparentFX

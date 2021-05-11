@@ -113,8 +113,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   charge: 10.42
   maxCharge: 100
-  type: 2
+  type: 1
   state: 3
+  prevState: 0
   place: -1
 --- !u!54 &8257306255608854877
 Rigidbody:

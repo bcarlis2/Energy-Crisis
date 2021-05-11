@@ -10,8 +10,10 @@ public class PhysicalBattery : MonoBehaviour
     SphereCollider trigger;
     Rigidbody rgBody;
     Renderer appear;
+    Outline outline;
     public bool isPhysical = true;
     int maxBatteries = 20;
+    bool buffer = true;
 
     // Start is called before the first frame update
     void Start()
@@ -23,10 +25,16 @@ public class PhysicalBattery : MonoBehaviour
         appear = GetComponent<Renderer>();
 
         //Adds outline at runtime
-        var outline = gameObject.AddComponent<Outline>();
-        outline.OutlineMode = Outline.Mode.OutlineVisible;
-        outline.OutlineColor = Color.green;
-        outline.OutlineWidth = 10f;
+        if (gameObject.GetComponent<Outline>() == null) {
+            outline = gameObject.AddComponent<Outline>();
+            outline.OutlineMode = Outline.Mode.OutlineVisible;
+            outline.OutlineColor = Color.green;
+            outline.OutlineWidth = 10f;
+        } else {
+            outline = gameObject.GetComponent<Outline>();
+        }
+
+        Invoke(nameof(loadBuffer),1f);
     }
 
     // Update is called once per frame
@@ -35,16 +43,21 @@ public class PhysicalBattery : MonoBehaviour
         
     }
 
+    //Makes it so player can't reload on battery and grab it instantly
+    void loadBuffer() {
+        buffer = false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player")) {
+        if (other.gameObject.CompareTag("Player") && !buffer) {
             Debug.Log("BATTERY COLLIDED");
             bm = other.gameObject.GetComponentInChildren<BatteryManager>();
             if (bm.numOfBatteries < maxBatteries) {
                 transform.SetParent(bm.gameObject.transform); //Gets the Player's GameObject's child's BatteryManager's parent's transform
                 //bm.refreshBatteryArray();
                 bm.addBattery(battery);
-                AudioManager.instance.Play("Bloop");
+                AudioManager.instance?.Play("Bloop");
                 isPhysical = false;
                 //Turn off everything that makes it physical
                 trigger.enabled = false;
@@ -52,6 +65,7 @@ public class PhysicalBattery : MonoBehaviour
                 rgBody.isKinematic = false;
                 rgBody.useGravity = false;
                 appear.enabled = false;
+                this.enabled = false;
             }
 
         }

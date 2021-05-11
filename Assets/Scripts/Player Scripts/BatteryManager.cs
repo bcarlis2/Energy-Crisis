@@ -16,24 +16,48 @@ public class BatteryManager : MonoBehaviour
     //[SerializeField] public BatteryIcons icon;
     [SerializeField] public Sprite aaaSprite;
     [SerializeField] public GameObject uiHolder;
-    public enum Type {AA, AAA, D};
+    public enum Type {AAA, D, Car, NineVolt};
     public enum State {Inventory, InUse, Charging, None};
     public int chargeCost = 0;
     public GameObject blueFilter;
     public GameObject aaaIcon;
     public GameObject dIcon;
+    public GameObject carIcon;
+    public GameObject nineVIcon;
     public int spacer = 50; //distance between each icon
     float leftSpace = 50;
-    [SerializeField] MissionManager mm;
+    [SerializeField] public MissionManager mm;
     public bool tellMM = false;
+
+    void Awake() {
+        if (batteries == null)
+            return;
+        
+        refreshBatteryArray();
+    }
 
     void Start()
     { 
+        Debug.Log("ON START");
+
         //blueFilter = GameObject.FindGameObjectWithTag("Filter");
         batteryClicker = GetComponent<BatteryClicker>();
         batteries = new ArrayList();
         icons = new List<GameObject>();
         refreshBatteryArray();
+    }
+
+    //Called by SaveData
+    public void clearBatteryAray() {
+        foreach (Transform child in transform) {
+            Destroy(child.gameObject);
+        }
+        batteries.Clear();
+        foreach (GameObject icon in icons) {
+            Destroy(icon);
+        }
+        icons.Clear();
+        leftSpace = 50f;
     }
 
     public void refreshBatteryArray() {
@@ -45,6 +69,8 @@ public class BatteryManager : MonoBehaviour
         batteries.AddRange(GetComponentsInChildren<Battery>()); //Adds all batteries that are currently children of BatteryManager, also includes a "includeInactive" boolean parameter
 
         numOfBatteries = GetComponentsInChildren<Battery>().Length;
+
+        Debug.Log(numOfBatteries);
 
         refreshIcons();
 
@@ -88,6 +114,12 @@ public class BatteryManager : MonoBehaviour
                 case BatteryManager.Type.D:
                     icon = dIcon;
                     break;
+                case BatteryManager.Type.Car:
+                    icon = carIcon;
+                    break;
+                case BatteryManager.Type.NineVolt:
+                    icon = nineVIcon;
+                    break;
                 default:
                     icon = aaaIcon;
                     break;
@@ -95,9 +127,12 @@ public class BatteryManager : MonoBehaviour
 
             GameObject newIcon = Instantiate(icon,Vector3.zero,Quaternion.identity);
             RectTransform newRect = newIcon.GetComponent<RectTransform>();
+            BatteryIcons bi = newIcon.GetComponentInChildren<BatteryIcons>();
             newRect.SetParent(uiHolder.transform);
             newRect.localScale = Vector3.one; //Scales icon to (1,1,1)
-            newRect.localPosition = new Vector3(leftSpace+spacer,25,0); //Shifts icon
+            bi.setPosition(leftSpace);
+            bi.setWidth(newRect.rect.width);
+            newRect.localPosition = new Vector3(bi.position,25,0); //Shifts icon
             leftSpace += spacer + newRect.rect.width;
             newIcon.GetComponentInChildren<BatteryIcons>().setBattery(battery);
             newIcon.GetComponentInChildren<BatteryIcons>().setClicker(batteryClicker);
@@ -132,24 +167,24 @@ public class BatteryManager : MonoBehaviour
         //Debug.Log(" LL: " + leftLength);
 
         foreach(Battery battery in rightBatteries) {
-            if (battery.checkMatch(type,amountNeeded) && battery.state == State.Inventory) { //Will only use batteries that can fire at least once and are neither already in use or charging
+            if (battery.checkMatch(type,amountNeeded) && battery != oldBattery) { //Will only use batteries that can fire at least once and is not the same battery (can be changed to check state)
                 //Debug.Log(battery.toString(i,"GETTING"));
                 battery.changeState(State.InUse);
-                AudioManager.instance.Play("Bloop");
+                AudioManager.instance?.Play("Bloop");
 
-                oldBattery?.changeState(State.Inventory); //The question mark checks if the object is null before calling method
+                oldBattery?.changeBackState(); //The question mark checks if the object is null before calling method
 
                 return battery;
             }
         }
 
         foreach(Battery battery in leftBatteries) {
-            if (battery.checkMatch(type,amountNeeded) && battery.state == State.Inventory) { //Will only use batteries that can fire at least once and are neither already in use or charging
+            if (battery.checkMatch(type,amountNeeded) && battery != oldBattery) { //Will only use batteries that can fire at least once and are is not the same battery (can be changed to check state)
                 //Debug.Log(battery.toString(i,"GETTING"));
                 battery.changeState(State.InUse);
-                AudioManager.instance.Play("Bloop");
+                AudioManager.instance?.Play("Bloop");
 
-                oldBattery?.changeState(State.Inventory); //The question mark checks if the object is null before calling method
+                oldBattery?.changeBackState(); //The question mark checks if the object is null before calling method
 
                 return battery;
             }
@@ -182,7 +217,7 @@ public class BatteryManager : MonoBehaviour
 
         int i=1; //just for debugging
         foreach (Battery battery in batteries) {
-            if (battery.canCharge() && battery.state != State.InUse) {
+            if (battery.canCharge()) { //I decided against excluding batteries in use. If you want to add that back in, add "&& battery.state != State.InUse"
 
                 //Debug.Log(battery.state);
 
@@ -225,6 +260,13 @@ public class BatteryManager : MonoBehaviour
             }
         }
     }
+    
+    //A cheat, called by MouseLook
+    public void fillAllBatteries() {
+        foreach (Battery battery in batteries) {
+            battery.chargeIt(battery.maxCharge - battery.charge);
+        }
+    }
 
     public void swapBatteries(Battery battery1, Battery battery2) {
         int loc1, loc2;
@@ -259,11 +301,18 @@ public class BatteryManager : MonoBehaviour
             case BatteryManager.Type.D:
                 icon = dIcon;
                 break;
+            case BatteryManager.Type.Car:
+                icon = carIcon;
+                break;
+            case BatteryManager.Type.NineVolt:
+                icon = nineVIcon;
+                break;
             default:
                 icon = aaaIcon;
                 break;
         }
 
+        
         GameObject newIcon = Instantiate(icon,Vector3.zero,Quaternion.identity);
         RectTransform newRect = newIcon.GetComponent<RectTransform>();
         newRect.SetParent(uiHolder.transform);
@@ -274,10 +323,43 @@ public class BatteryManager : MonoBehaviour
         newIcon.GetComponentInChildren<BatteryIcons>().setClicker(batteryClicker);
         newIcon.SetActive(true); //Show it!
         icons.Add(newIcon);
+        
+
+        //refreshIcons(); //Thought I could go without doing this everytime, but might have to
 
         if (tellMM && mm) {
             mm.gotBattery();
         }
 
+    }
+
+    public void removeBattery(Battery removeB) { //Lite version of refreshBatteryArray and refreshIcons
+        //batteries.Remove(removeB);
+        removeB.gameObject.transform.SetParent(null);
+        Destroy(removeB.gameObject);
+        refreshBatteryArray();
+
+        if (tellMM && mm) {
+            mm.removeBattery();
+        }
+
+    }
+
+    public bool removeBattery(Type removeType) {
+        foreach(Battery battery in batteries) {
+            if (battery.checkMatch(removeType,battery.maxCharge)) {
+                //batteries.Remove(battery);
+                Debug.Log("RB: Match: " + removeType);
+                battery.gameObject.transform.SetParent(null);
+                Destroy(battery.gameObject);
+                refreshBatteryArray();
+
+                if (tellMM && mm) {
+                    mm.removeBattery();
+                }
+                return true;
+            }
+        }
+        return false;
     }
 }

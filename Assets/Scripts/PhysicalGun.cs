@@ -50,6 +50,19 @@ public class PhysicalGun : MonoBehaviour {
     {
         if (other.gameObject.CompareTag("Player")) {
             //Debug.Log("BATTERY COLLIDED");
+            
+            if (gunScript.bm == null) {
+                gunScript.bm = other.gameObject.GetComponentInChildren<BatteryManager>();
+            }
+
+            if (gunScript.mouseLook == null) {
+                gunScript.mouseLook = other.gameObject.GetComponentInChildren<MouseLook>();
+            }
+
+            if (gunScript.fpsCam == null) {
+                gunScript.fpsCam = other.gameObject.GetComponentInChildren<Camera>();
+            }
+
             weaponSwitcher = other.gameObject.GetComponentInChildren<WeaponSwitcher>();
             transform.SetParent(weaponSwitcher.gameObject.transform); //Gets the Player's GameObject's child's WeaponHolder's parent's transform
 

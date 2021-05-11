@@ -63,6 +63,7 @@ public class Gun : MonoBehaviour
         outline = gameObject.GetComponent<Outline>();
         outline.enabled = false;
         hitmarker = transform.parent.parent.parent.GetComponentInChildren<Hitmarker>(); //Looks sketchy
+        mm = transform.parent.parent.parent.GetComponentInChildren<MissionManager>();
     }
 
     void OnEnable() {
@@ -76,7 +77,7 @@ public class Gun : MonoBehaviour
 
     void Update()
     {
-        battery?.changeState(BatteryManager.State.InUse); //Just in case it gets changed, may not be needed?
+        //battery?.changeState(BatteryManager.State.InUse); //Just in case it gets changed, may not be needed?
 
         if (mouseLook.paused)
             return;
@@ -86,7 +87,7 @@ public class Gun : MonoBehaviour
                 nextTimeToFire = Time.time + 1f / fireRate; //Sets the next time the gun will be ready to fire
                 Shoot();
             } else {
-                AudioManager.instance.Play("Empty");
+                AudioManager.instance?.Play("Empty");
             }
         }
 
@@ -106,10 +107,10 @@ public class Gun : MonoBehaviour
 
         if (gunType == GunType.Pistol) {
             gunSlide.localPosition = new Vector3(gunSlide.localPosition.x, gunSlide.localPosition.y, gunSlide.localPosition.z +0.02f);
-            AudioManager.instance.Play("PistolFire");
+            AudioManager.instance?.Play("PistolFire");
         } else if (gunType == GunType.Shotgun) {
             gunSlide.localPosition = new Vector3(gunSlide.localPosition.x, gunSlide.localPosition.y, gunSlide.localPosition.z -0.1f);
-            AudioManager.instance.Play("ShotgunFire");
+            AudioManager.instance?.Play("ShotgunFire");
         }
         Invoke(nameof(turnOffMuzzleFlash),0.2f);
 
@@ -170,6 +171,12 @@ public class Gun : MonoBehaviour
     //Any enemy damage event should go through here
     private void dealDamage(Target target, float damage) {
         hitmarker.enabled = true;
+
+        if (target.health <= damage && tellMM && mm) {
+            Debug.Log("Gun Killed Target");
+            mm.killedEnemy();
+        }
+
         target.TakeDamage(damage);
     }
 }

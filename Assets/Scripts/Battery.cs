@@ -8,6 +8,7 @@ public class Battery : MonoBehaviour
     public int maxCharge = 100;
     [SerializeField] public BatteryManager.Type type;
     [SerializeField] public BatteryManager.State state;
+    public BatteryManager.State prevState;
     public int place = -1;
     //BatteryManager bm;
 
@@ -83,6 +84,16 @@ public class Battery : MonoBehaviour
     }
 
     public void changeState(BatteryManager.State inState) {
+        Debug.Log("Battery: Change State");
+        
+        if (state != BatteryManager.State.Charging)
+            prevState = state;
+        
         state = inState;
+    }
+
+    public void changeBackState() {
+        Debug.Log("Battery: Change Back State");
+        state = prevState;
     }
 }

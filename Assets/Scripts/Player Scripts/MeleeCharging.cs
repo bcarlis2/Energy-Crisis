@@ -49,7 +49,7 @@ public class MeleeCharging : MonoBehaviour {
         buffer = 0;
         give = 0f;
 
-        AudioManager.instance.Play("MeleeCharging");
+        AudioManager.instance?.Play("MeleeCharging");
 
         startBattery = playerGun.battery;
         //outline = playerGun.gameObject.GetComponent<Outline>();
