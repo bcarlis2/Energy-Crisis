@@ -21,19 +21,13 @@ public class AudioManager : MonoBehaviour {
 
     public static AudioManager instance;
 
+    public bool enabledAudio = true;
+
+    private AudioSource music;
+
     #endregion
 
     #region Unity Methods
-
-    public void Start()
-    {
-        //Play("Theme");
-    }
-
-    public void Update()
-    {
-        //You're doing great!
-    }
 
     void Awake() {
 
@@ -54,18 +48,48 @@ public class AudioManager : MonoBehaviour {
         }
     }
 
+    void Start() {
+        toggleMusic(enabledAudio);
+    }
+
     #endregion
 
     #region Methods
 	
-	public void Play(string name) {
+	public AudioSource Play(string name) {
+        if (!enabledAudio)
+            return null;
+
         Sound s = Array.Find(sounds, sound => sound.name == name);
 
         if (s == null) {
             Debug.LogWarning("Sound: " + name + "not found!");
+            return null;
         }
 
         s.source.Play();
+        return s.source;
+    }
+
+    public void toggleMusic(bool toggle) {
+        Debug.Log("Music: " + toggle);
+        if (toggle) {
+            playMusic();
+        } else {
+            stopMusic();
+        }
+    }
+
+    public void playMusic() {
+        music = Play("Beat");
+        Debug.Log(music);
+    }
+
+    public void stopMusic() {
+        if (!music)
+            return;
+
+        music.Stop();
     }
 
     #endregion

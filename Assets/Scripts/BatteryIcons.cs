@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using UnityEngine.EventSystems;
 
 public class BatteryIcons : MonoBehaviour, IPointerClickHandler
@@ -15,9 +16,11 @@ public class BatteryIcons : MonoBehaviour, IPointerClickHandler
     RectTransform rt;
 
     public BatteryManager.State status;
+    public TextMeshProUGUI text;
     public float charge;
     public float position;
     public float width;
+    public bool showText = false;
     bool charging = false;
 
     void Start()
@@ -47,6 +50,11 @@ public class BatteryIcons : MonoBehaviour, IPointerClickHandler
 
     public void setWidth(float inWidth) {
         width = inWidth;
+    }
+
+    public void setTextShow(bool inShow) {
+        showText = inShow;
+        text.enabled = showText;
     }
 
     //Updates the UI elements for the batteries

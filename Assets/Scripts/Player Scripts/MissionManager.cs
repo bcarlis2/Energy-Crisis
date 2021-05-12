@@ -22,8 +22,8 @@ public class MissionManager : MonoBehaviour {
 
     [System.Serializable]
     public class Mission {
-        public enum MissionType {GetWeapon,GetBattery,MeleeEnemy,PressReload,PressFire,KillEnemy,Interact,Trigger,RemoveBattery,WipeSpawner}
-        public enum CheckComponent {WeaponSwitcher,BatteryManager,PlayerMelee,Gun,AllAttacks,Interactable,EnemySpawner}
+        public enum MissionType {GetWeapon,GetBattery,MeleeEnemy,PressReload,PressFire,KillEnemy,Interact,Trigger,RemoveBattery,WipeSpawner,Charge}
+        public enum CheckComponent {WeaponSwitcher,BatteryManager,PlayerMelee,Gun,AllAttacks,Interactable,EnemySpawner,Battery}
 
         public MissionType missionType;
         public CheckComponent toCheck;
@@ -45,6 +45,7 @@ public class MissionManager : MonoBehaviour {
     [SerializeField] public Gun[] guns;
     [SerializeField] public EnemySpawner[] enemySpawners;
     [SerializeField] public TextMeshProUGUI objectiveGUI;
+    [SerializeField] public Battery battery;
     [SerializeField] public List<Mission> currentMissions = new List<Mission>();
     public bool checkWeaponSwitcher = false;
     public bool checkBatteryManager = false;
@@ -195,6 +196,11 @@ public class MissionManager : MonoBehaviour {
                         enemySpawner.tellMM = true;
                     }
                     break;
+                case Mission.CheckComponent.Battery:
+                    Debug.Log("CheckComponent Battery");
+                    battery.tellMM = true;
+                    Debug.Log("tellMM : " + battery.tellMM);
+                    break;
             }
         }
     }
@@ -272,6 +278,11 @@ public class MissionManager : MonoBehaviour {
     //Called by EnemySpawner
     public void wipedSpawner() {
         updateMissions(Mission.MissionType.WipeSpawner);
+    }
+
+    //Called by Battery
+    public void gotCharged() {
+        updateMissions(Mission.MissionType.Charge);
     }
 
     /*

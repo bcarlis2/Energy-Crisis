@@ -22,6 +22,7 @@ public class MissionsLevelFinal : MissionManager {
 
     [SerializeField] EnemySpawner[] spawners;
     [SerializeField] CinemaCam cineCam;
+    [SerializeField] Battery carBattery;
 
     #endregion
 
@@ -41,11 +42,11 @@ public class MissionsLevelFinal : MissionManager {
         hasEvent = true;
     }
 
-    //Put the big battery in the generator
     void StartMission2() {
-        objectiveGUI.SetText("Fight the horde and charge that battery! Then put it in the generator");
+        objectiveGUI.SetText("Fight the horde and charge that car battery!");
         
-        currentMissions.Add(new Mission(Mission.MissionType.Interact,Mission.CheckComponent.Interactable,0,1)); //Interact Mission
+        carBattery.mm = this;
+        currentMissions.Add(new Mission(Mission.MissionType.Charge,Mission.CheckComponent.Battery,0,1)); //Charge Mission
 
         foreach(EnemySpawner spawner in spawners) {
             spawner.spawnInfinite(1); //How many should be active at any given moment
@@ -53,6 +54,19 @@ public class MissionsLevelFinal : MissionManager {
 
         missionNumber = 2;
         missionComplete.RemoveListener(StartMission2);
+        missionComplete.AddListener(StartMission22);
+        getComponents();
+        hasEvent = true;
+    }
+
+    //Put the big battery in the generator
+    void StartMission22() {
+        objectiveGUI.SetText("Put the battery in the generator");
+        
+        currentMissions.Add(new Mission(Mission.MissionType.Interact,Mission.CheckComponent.Interactable,0,1)); //Interact Mission
+
+        missionNumber = 22;
+        missionComplete.RemoveListener(StartMission22);
         missionComplete.AddListener(StartMission3);
         getComponents();
         hasEvent = true;
@@ -79,15 +93,22 @@ public class MissionsLevelFinal : MissionManager {
     }
 
     void StartMission4() {
-        objectiveGUI.SetText("YOU DID IT");
+        objectiveGUI.SetText("You did it! You finally have a safe haven");
 
         missionNumber = 4;
         missionComplete.RemoveListener(StartMission4);
 
-        cineCam.enabled = true; //Angle1
+        PlayerMovement._instance.canMove = false; //Stop player
+        Invoke(nameof(cutscene),5f);
+
+        //cineCam.enabled = true; //Angle1
 
 
         //This will end with loading to a new scene
+    }
+
+    void cutscene() {
+        cineCam.enabled = true;
     }
 
     void NoMission() {

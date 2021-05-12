@@ -27,6 +27,10 @@ public class TitleScreen : MonoBehaviour {
     public void Start()
     {
         //Hello :)
+        GameObject player = GameObject.Find("Player");
+
+        if (player)
+            Destroy(player);
     }
 
     public void Update()
@@ -39,7 +43,7 @@ public class TitleScreen : MonoBehaviour {
     #region Methods
 	
 	public void startGame() {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("Warehouse");
     }
 
     public void toggleFullscreen() {
@@ -50,6 +54,7 @@ public class TitleScreen : MonoBehaviour {
         if (!AudioManager.instance)
             return;
         
+        AudioManager.instance.toggleMusic(!AudioManager.instance.enabled);
         AudioManager.instance.enabled = !AudioManager.instance.enabled;
     }
 

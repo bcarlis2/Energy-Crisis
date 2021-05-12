@@ -21,14 +21,18 @@ public class PowerPole : MonoBehaviour {
     public List<Target> targets;
     public LayerMask whatIsEnemy;
     public float sightRange = 50f;
-    public float pulseWait = 1f;
+    public float pulseWait = 2f;
+    public float totalTime = 30f;
     public bool enemiesInRange = false;
     [SerializeField] public Material glow;
     [SerializeField] public Material oMat;
 
     //LineRenderer lr;
-    private Renderer renderer;
+    [SerializeField] public Renderer renderer1, renderer2;
     public SphereCollider sphereC;
+    public Interactable interactable;
+
+    private bool stop = false;
 
     #endregion
 
@@ -36,7 +40,8 @@ public class PowerPole : MonoBehaviour {
 
     public void Start() {
         sphereC = gameObject.GetComponent<SphereCollider>();
-        renderer = GetComponent<Renderer>();
+        interactable = gameObject.GetComponent<Interactable>();
+        //renderer = GetComponent<Renderer>();
         //lr = gameObject.GetComponent<LineRenderer>();
 
     }
@@ -50,8 +55,18 @@ public class PowerPole : MonoBehaviour {
     #region Methods
 
     public void startShocking() {
+        interactable.enabled = false;
         sphereC.enabled = true;
+        stop = false;
         pulseLoop();
+        Invoke(nameof(endShocking),totalTime);
+    }
+
+    public void endShocking() {
+        Debug.Log("Stop Shocking");
+        stop = true;
+        sphereC.enabled = false;
+        this.enabled = false;
     }
 
     private void pulseLoop() {
@@ -60,11 +75,11 @@ public class PowerPole : MonoBehaviour {
     }
 
     public void sendPulse() {
-        if (targets.Count == 0)
+        if (targets.Count == 0 || stop)
             return;
     
         int rand = Random.Range(0,targets.Count);
-        Debug.Log("Shooting at Target " + rand);
+        Debug.Log("Shooting at Target " + rand + "out of " + targets.Count);
         Target doomedOne = targets[rand];
 
         if (doomedOne == null)
@@ -72,13 +87,16 @@ public class PowerPole : MonoBehaviour {
 
         targets.Remove(doomedOne);
         //lr.SetPosition(0, doomedOne.gameObject.transform.position);
-        doomedOne.TakeDamage(50);
-        renderer.material = glow;
+        doomedOne.getShocked(75);
+        renderer1.material = glow;
+        renderer2.material = glow;
+        AudioManager.instance?.Play("PowerPole");
         Invoke(nameof(noGlow),pulseWait/2);
     }
 
     public void noGlow() {
-        renderer.material = oMat;
+        renderer1.material = oMat;
+        renderer2.material = oMat;
     }
 
     void OnTriggerEnter(Collider other) {

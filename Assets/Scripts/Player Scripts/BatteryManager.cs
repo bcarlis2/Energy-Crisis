@@ -27,7 +27,10 @@ public class BatteryManager : MonoBehaviour
     public int spacer = 50; //distance between each icon
     float leftSpace = 50;
     [SerializeField] public MissionManager mm;
+    [SerializeField] public WeaponSwitcher weaponSwitcher;
     public bool tellMM = false;
+    public bool showBatteryName = false;
+    public bool batteryEquipped = false;
 
     void Awake() {
         if (batteries == null)
@@ -134,8 +137,9 @@ public class BatteryManager : MonoBehaviour
             bi.setWidth(newRect.rect.width);
             newRect.localPosition = new Vector3(bi.position,25,0); //Shifts icon
             leftSpace += spacer + newRect.rect.width;
-            newIcon.GetComponentInChildren<BatteryIcons>().setBattery(battery);
-            newIcon.GetComponentInChildren<BatteryIcons>().setClicker(batteryClicker);
+            bi.setBattery(battery);
+            bi.setClicker(batteryClicker);
+            bi.setTextShow(showBatteryName);
             newIcon.SetActive(true); //Show it!
             icons.Add(newIcon);
             i++;
@@ -148,6 +152,7 @@ public class BatteryManager : MonoBehaviour
         int oldIndex;
         int leftLength;
         int rightLength;
+
 
         if (oldBattery && batteries.Contains(oldBattery)) {
             oldIndex = batteries.IndexOf(oldBattery);
@@ -166,11 +171,14 @@ public class BatteryManager : MonoBehaviour
         ArrayList leftBatteries = batteries.GetRange(0,leftLength);
         //Debug.Log(" LL: " + leftLength);
 
+        batteryEquipped = false;
+
         foreach(Battery battery in rightBatteries) {
             if (battery.checkMatch(type,amountNeeded) && battery != oldBattery) { //Will only use batteries that can fire at least once and is not the same battery (can be changed to check state)
                 //Debug.Log(battery.toString(i,"GETTING"));
                 battery.changeState(State.InUse);
                 AudioManager.instance?.Play("Bloop");
+                batteryEquipped = true;
 
                 oldBattery?.changeBackState(); //The question mark checks if the object is null before calling method
 
@@ -183,6 +191,7 @@ public class BatteryManager : MonoBehaviour
                 //Debug.Log(battery.toString(i,"GETTING"));
                 battery.changeState(State.InUse);
                 AudioManager.instance?.Play("Bloop");
+                batteryEquipped = true;
 
                 oldBattery?.changeBackState(); //The question mark checks if the object is null before calling method
 
@@ -246,6 +255,7 @@ public class BatteryManager : MonoBehaviour
         foreach (Battery battery in batteries) {
             battery.changeState(State.Inventory);
         }
+        batteryEquipped = false;
     }
 
     public void chargeSpecificBattery(float amount, Battery inBattery) {
@@ -321,6 +331,7 @@ public class BatteryManager : MonoBehaviour
         leftSpace += spacer + newRect.rect.width;
         newIcon.GetComponentInChildren<BatteryIcons>().setBattery(newBattery);
         newIcon.GetComponentInChildren<BatteryIcons>().setClicker(batteryClicker);
+        newIcon.GetComponentInChildren<BatteryIcons>().setTextShow(showBatteryName);
         newIcon.SetActive(true); //Show it!
         icons.Add(newIcon);
         
@@ -331,6 +342,9 @@ public class BatteryManager : MonoBehaviour
             mm.gotBattery();
         }
 
+        if (!batteryEquipped) { //If there isn't any battery equpped, and there is a new battery, try to load it right in
+            weaponSwitcher.autoReload();
+        }
     }
 
     public void removeBattery(Battery removeB) { //Lite version of refreshBatteryArray and refreshIcons
@@ -349,7 +363,7 @@ public class BatteryManager : MonoBehaviour
         foreach(Battery battery in batteries) {
             if (battery.checkMatch(removeType,battery.maxCharge)) {
                 //batteries.Remove(battery);
-                Debug.Log("RB: Match: " + removeType);
+                //Debug.Log("RB: Match: " + removeType);
                 battery.gameObject.transform.SetParent(null);
                 Destroy(battery.gameObject);
                 refreshBatteryArray();
@@ -361,5 +375,17 @@ public class BatteryManager : MonoBehaviour
             }
         }
         return false;
+    }
+
+    public void changeShowBatteryName(bool change) {
+        //if (inShow == showBatteryName)
+        //    return;
+        Debug.Log("Options: Show Battery Name - " + change);
+        
+        showBatteryName = change;
+
+        foreach(GameObject icon in icons) {
+            icon.GetComponentInChildren<BatteryIcons>().setTextShow(showBatteryName);
+        }
     }
 }

@@ -30,6 +30,7 @@ public class PlayerMelee : MonoBehaviour {
     [SerializeField] MouseLook mouseLook;
     [SerializeField] public MeleeCharging meleeCharging;
     private WeaponSwitcher weaponSwitcher;
+    private BatteryManager bm;
     private Hitmarker hitmarker;
 
     public bool isStabbing = false;
@@ -54,6 +55,7 @@ public class PlayerMelee : MonoBehaviour {
     {
         weaponSwitcher = GetComponentInChildren<WeaponSwitcher>();
         hitmarker = GetComponentInChildren<Hitmarker>();
+        bm = GetComponentInChildren<BatteryManager>();
     }
 
     public void Awake() {
@@ -171,8 +173,12 @@ public class PlayerMelee : MonoBehaviour {
         simpleMeleeing = false;
         meleeCharging.charging = false;
 
-        if (gun)
+        if (gun) {
             gun.transform.localPosition = originalGunLoc;
+
+            if (!bm.batteryEquipped)
+                gun.GetComponent<Gun>().autoReload();
+        }
 
         playerMovement.canMove = true;
         enemyMovement.canMove = true;

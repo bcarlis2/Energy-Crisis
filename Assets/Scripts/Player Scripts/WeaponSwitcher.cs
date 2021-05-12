@@ -112,4 +112,11 @@ public class WeaponSwitcher : MonoBehaviour
             Destroy(weapon.gameObject);
         }
     }
+
+    public void autoReload() {
+        if (selectedWeapon < 0)
+            return;
+
+        transform.GetChild(selectedWeapon).GetComponent<Gun>().autoReload();
+    }
 }

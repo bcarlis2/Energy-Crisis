@@ -111,5 +111,9 @@ public class Interactable : MonoBehaviour {
         }
     }
 
+    public virtual void changeText(string inText) {
+        text = inText;
+    }
+
     #endregion
 }

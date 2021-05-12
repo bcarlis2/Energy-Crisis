@@ -12,6 +12,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CinemaCam : MonoBehaviour {
 
@@ -97,12 +98,18 @@ public class CinemaCam : MonoBehaviour {
     
     private void endCinema() {
         credits.SetActive(true);
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void endGame() {
         //We're in the endGame now
         playerMovement.gameObject.SetActive(true);
-        playerMovement.toMenu();
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        //Time.timeScale = 1;
+        SceneManager.LoadScene("TitleScreen");
+        //playerMovement.toMenu();
     }
 
     #endregion

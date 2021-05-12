@@ -31,6 +31,7 @@ public class MissionsLevel4 : MissionManager {
     [SerializeField] GameObject redLight2;
     [SerializeField] GameObject roofBarrier;
     [SerializeField] Door farmDoor;
+    private bool notTheseMissions = false;
 
     #endregion
 
@@ -39,11 +40,12 @@ public class MissionsLevel4 : MissionManager {
     public override void checkSecondSpawn() {
 
         if (!PlayerMovement._instance.secondSpawn) {
+            notTheseMissions = true;
             Destroy(this);
             return;
         }
 
-        //Debug.Log("MM recognizes Second Spawn");
+        Debug.Log("MM recognizes Second Spawn");
 
         //MissionManager[] missionManagers = this.gameObject.GetComponents<MissionManager>();
         //Destroy(missionManagers[0]);
@@ -52,6 +54,9 @@ public class MissionsLevel4 : MissionManager {
 	
     //Inspect the electrical box
 	public override void StartMission1() {
+        if (notTheseMissions)
+            return;
+        
         objectiveGUI.SetText("You don't have enough batteries to take them out. Look around for something");
 
         disableSpawner.enabled = false;

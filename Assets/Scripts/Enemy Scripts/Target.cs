@@ -14,6 +14,8 @@ public class Target : MonoBehaviour
     public EnemyMovement enemyMovement;
     public NavMeshAgent nma;
     [SerializeField] MissionManager mm;
+    public Material oMat;
+    [SerializeField] Material shockMat;
     public bool tellMM;
 
     [Space(10)]
@@ -80,6 +82,23 @@ public class Target : MonoBehaviour
         if (health <= 0f && !dead) {
             Die();
         }
+    }
+
+    public void getShocked(float amount) {
+        TakeDamage(amount);
+
+        if (dead)
+            return;
+        
+        Renderer bodyPart = GetComponent<Renderer>();
+        oMat = bodyPart.material;
+        bodyPart.material = shockMat;
+        Invoke(nameof(resetShock),1f);
+    }
+
+    private void resetShock() {
+        Renderer bodyPart = GetComponent<Renderer>();
+        bodyPart.material = oMat;
     }
 
     public void Die(bool skipCharge = false) { //Will count as player kill (maybe)

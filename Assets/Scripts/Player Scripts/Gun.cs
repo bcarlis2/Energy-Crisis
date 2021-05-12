@@ -67,7 +67,7 @@ public class Gun : MonoBehaviour
     }
 
     void OnEnable() {
-        battery = bm.getBattery(batteryType,chargeCost); //Battery Manager will find the battery for the gun
+        autoReload();
     }
 
     void OnDisable() {
@@ -144,6 +144,16 @@ public class Gun : MonoBehaviour
             oldBattery.changeState(BatteryManager.State.Inventory);
             //nextTimeToFire = 0f; //No cooldown if you reload?
         }
+
+        if (tellMM && mm) {
+            mm.gotReload();
+        }
+    }
+
+    //Called by PlayerMelee after melee charging if there is not already a battery equipped
+    public void autoReload() {
+        Debug.Log("Auto Reload");
+        battery = bm.getBattery(batteryType,chargeCost); //Battery Manager will find the battery for the gun
 
         if (tellMM && mm) {
             mm.gotReload();

@@ -94,4 +94,12 @@ public class MouseLook : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         SaveData.instance?.Load();
     }
+
+    //The Exit button on the pause menu calls this
+    public void exitToMenu() {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        Time.timeScale = 1;
+        SceneManager.LoadScene("TitleScreen");
+    }
 }

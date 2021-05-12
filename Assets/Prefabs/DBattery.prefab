@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   charge: 10.42
-  maxCharge: 100
+  maxCharge: 200
   type: 1
   state: 3
   prevState: 0

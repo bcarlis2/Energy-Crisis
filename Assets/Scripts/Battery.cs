@@ -9,6 +9,8 @@ public class Battery : MonoBehaviour
     [SerializeField] public BatteryManager.Type type;
     [SerializeField] public BatteryManager.State state;
     public BatteryManager.State prevState;
+    public MissionManager mm;
+    public bool tellMM = false;
     public int place = -1;
     //BatteryManager bm;
 
@@ -44,6 +46,14 @@ public class Battery : MonoBehaviour
 
         if (charge > maxCharge) {
             Debug.Log("A battery is overcharged??");
+        }
+
+        if (charge >= maxCharge)
+            Debug.Log("Charged battery");
+
+        if (charge >= maxCharge && mm && tellMM) {
+            Debug.Log("MM: Charged battery");
+            mm.gotCharged();
         }
     }
 

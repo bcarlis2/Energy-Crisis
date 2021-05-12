@@ -235,6 +235,8 @@ MonoBehaviour:
   enemyMovement: {fileID: 0}
   nma: {fileID: 0}
   mm: {fileID: 0}
+  oMat: {fileID: 0}
+  shockMat: {fileID: 2100000, guid: 127bdb46f7407b44ca2f844842674186, type: 2}
   tellMM: 0
   maxHealth: 100
   triggerDistance: 10

@@ -26,6 +26,13 @@ public class Door : Interactable {
 
     #endregion
 
+    public void Start()
+    {
+        if (warehouseDoor && PlayerMovement._instance.secondSpawn) {
+            base.changeText("Go To Roof");
+        }
+        //renderer = this.gameObject.GetComponent<Renderer>();
+    }
 
     #region Methods
 	
@@ -36,8 +43,11 @@ public class Door : Interactable {
     public override void interact() {
         base.interact();
 
-        if (warehouseDoor && base.playerMovement.secondSpawn) {
-            Transform secondSpawnLoc = GameObject.FindGameObjectWithTag("SecondSpawn").transform;
+        if (warehouseDoor && PlayerMovement._instance.secondSpawn) {
+            Debug.Log("Taking the player to the roof");
+            //Transform secondSpawnLoc = GameObject.FindGameObjectWithTag("SecondSpawn").transform;
+            Transform secondSpawnLoc = PlayerMovement._instance.secondSpawnLoc;
+            //Debug.Log("SecondSpawnLoc: " + secondSpawnLoc.position);
             base.playerMovement.transform.position = secondSpawnLoc.position; //Places the player at the roof
             base.playerMovement.transform.rotation = secondSpawnLoc.rotation;
             return;

@@ -86,3 +86,34 @@ MonoBehaviour:
     pitch: 0.4
     loop: 0
     source: {fileID: 0}
+  - name: GetGun
+    clip: {fileID: 8300000, guid: 2868e580baee45d449931dc35a5ace81, type: 3}
+    volume: 0.212
+    pitch: 1.1
+    loop: 0
+    source: {fileID: 0}
+  - name: PowerPole
+    clip: {fileID: 8300000, guid: 36b16062a5709a046a0cdc3e07f9bd55, type: 3}
+    volume: 0.212
+    pitch: 0.8
+    loop: 0
+    source: {fileID: 0}
+  - name: Hurt
+    clip: {fileID: 8300000, guid: 647bbda710c831143a83718fd2bbf49c, type: 3}
+    volume: 0.212
+    pitch: 0.8
+    loop: 0
+    source: {fileID: 0}
+  - name: Beat
+    clip: {fileID: 8300000, guid: 6f75afa319fb62b4bb0c00c5147ec8d2, type: 3}
+    volume: 0.121
+    pitch: 0.8
+    loop: 1
+    source: {fileID: 0}
+  - name: Eat
+    clip: {fileID: 8300000, guid: 70748a9a5514bf945a8e9e0ffb51172d, type: 3}
+    volume: 0.212
+    pitch: 0.8
+    loop: 0
+    source: {fileID: 0}
+  enabledAudio: 1

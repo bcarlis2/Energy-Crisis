@@ -30,6 +30,7 @@ public class MedKit : Interactable {
             return;
 
         base.playerHealth.giveHealth(heal);
+        AudioManager.instance.Play("Eat");
         Destroy(this.gameObject);
     }
 

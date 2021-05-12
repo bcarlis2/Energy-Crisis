@@ -15,6 +15,7 @@ public class ChargingField : MonoBehaviour
     float give = 0f;
     [SerializeField] public GameObject blueFilter;
     private PlayerHealth playerHealth;
+    private AudioSource audio;
 
     //Debugging
     public float totalCharge = 0;
@@ -70,6 +71,9 @@ public class ChargingField : MonoBehaviour
             if (playerHealth != null)
                 playerHealth.invinsible = false;
             
+            //if (audio)
+            //    audio.Stop();
+            
             //Destroy(transform.parent.gameObject); //Destroys the enemy parent
             Destroy(this.gameObject); //Destroys self
         }
@@ -117,7 +121,7 @@ public class ChargingField : MonoBehaviour
             playerHealth.invinsible = true;
             blueFilter.SetActive(true);
             charging = true;
-            AudioManager.instance?.Play("Charging");
+            audio = AudioManager.instance?.Play("Charging");
 
             //bm.chargeBattery();
             //Debug.Log("Charging Started");
@@ -130,6 +134,10 @@ public class ChargingField : MonoBehaviour
             playerHealth.invinsible = false;
             blueFilter.SetActive(false);
             charging = false;
+
+            if (audio)
+                audio.Stop();
+
             battery?.changeBackState(); //Resets the state of the last battery to charge
             //Debug.Log("Charging Stopped");
         }

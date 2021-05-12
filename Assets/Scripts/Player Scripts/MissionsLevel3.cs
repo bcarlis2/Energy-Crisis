@@ -75,7 +75,7 @@ public class MissionsLevel3 : MissionManager {
 
     //Find the ladder
         void StartMission4() {
-        objectiveGUI.SetText("Find a way out");
+        objectiveGUI.SetText("You recognize the farm in this picture. Maybe you can find a better shelter there. Let's go");
 
         door.GetComponent<Door>().enabled = true;
 

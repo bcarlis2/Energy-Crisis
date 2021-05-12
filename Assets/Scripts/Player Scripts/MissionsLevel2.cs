@@ -22,6 +22,7 @@ public class MissionsLevel2 : MissionManager {
 
     [SerializeField] EnemySpawner realMob;
     PlayerMovement playerMovement;
+    private bool notTheseMissions = false;
 
     #endregion
 
@@ -30,6 +31,7 @@ public class MissionsLevel2 : MissionManager {
     public override void checkSecondSpawn() {
 
         if (PlayerMovement._instance.secondSpawn) {
+            notTheseMissions = true;
             Destroy(this);
             return;
         }
@@ -41,6 +43,9 @@ public class MissionsLevel2 : MissionManager {
 	
     //Reach the "mob of enemies" trigger
 	public override void StartMission1() {
+        if (notTheseMissions)
+            return;
+        
         objectiveGUI.SetText("Explore and find supplies");
         
         currentMissions.Add(new Mission(Mission.MissionType.Trigger,Mission.CheckComponent.Interactable,0,1)); //Interact Mission
@@ -54,9 +59,9 @@ public class MissionsLevel2 : MissionManager {
 
     //Reach the "corner" trigger
     void StartMission2() {
-        objectiveGUI.SetText("Explore and find supplies");
+        objectiveGUI.SetText("Explore and find supplies.");
 
-        realMob.enabled = true;
+        realMob.spawn(20);
         
         currentMissions.Add(new Mission(Mission.MissionType.Trigger,Mission.CheckComponent.Interactable,0,1)); //Interact Mission
     

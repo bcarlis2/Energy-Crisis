@@ -153,6 +153,17 @@ public class PlayerMovement : MonoBehaviour
         SceneManager.LoadScene("TitleScreen");
     }
 
+    public void toggleMusic(bool toggle) {
+        AudioManager.instance.toggleMusic(toggle);
+    }
+
+    public void toggleAllAudio(bool toggle) {
+        Debug.Log("Options: Toggle Audio - " + toggle);
+        AudioManager.instance.enabledAudio = toggle;
+        AudioManager.instance.toggleMusic(toggle);
+        AudioManager.instance.enabled = toggle;
+    }
+
     /*
     bool whichSpawn() {
         Debug.Log("Spawn: Getting");

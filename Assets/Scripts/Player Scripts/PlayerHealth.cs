@@ -85,6 +85,7 @@ public class PlayerHealth : MonoBehaviour {
 
         if (!dead) {
             int tempNewHealth = health - damage;
+            AudioManager.instance?.Play("Hurt");
 
             //Simple color animation
             healthGUI.color = healthColors[1];

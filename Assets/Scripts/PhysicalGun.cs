@@ -80,6 +80,7 @@ public class PhysicalGun : MonoBehaviour {
             gunScript.enabled = true;
             //Equip gun
             weaponSwitcher.equipNew();
+            AudioManager.instance?.Play("GetGun");
         }
     }
 
