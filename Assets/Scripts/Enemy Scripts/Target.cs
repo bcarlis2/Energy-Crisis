@@ -1,4 +1,14 @@
-﻿using System.Collections;
+﻿/*
+	Project:    Energy Crisis
+	
+	Script:     Target
+	Desc:       Handles enemy health and death events
+	
+	Credits:	Brandon Carlisle
+	
+*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;

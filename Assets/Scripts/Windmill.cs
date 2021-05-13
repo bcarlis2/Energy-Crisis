@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     Windmill
+	Desc:       An infinite animation to have the windmill on the Farm rotate in the final cutscene
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */

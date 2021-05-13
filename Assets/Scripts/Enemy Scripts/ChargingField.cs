@@ -1,3 +1,13 @@
+/*
+	Project:    Energy Crisis
+	
+	Script:     ChargingField
+	Desc:       Tells BatteryManager to charge batteries as long as player is in the trigger
+	
+	Credits:	Brandon Carlisle
+	
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

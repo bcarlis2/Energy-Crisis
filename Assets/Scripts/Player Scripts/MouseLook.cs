@@ -1,4 +1,14 @@
-﻿using System.Collections;
+﻿/*
+	Project:    Energy Crisis
+	
+	Script:     MouseLook
+	Desc:       Handles mouse movements
+	
+	Credits:	Brandon Carlisle
+	
+*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -25,6 +35,9 @@ public class MouseLook : MonoBehaviour
     Vector3 lookPos;
     int speed = 10;
 
+    public CursorLockMode lockState; //Just for debug
+    public bool mouseVis; //Just for debug
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -32,6 +45,9 @@ public class MouseLook : MonoBehaviour
 
     void Update()
     {
+
+        lockState = Cursor.lockState;
+        mouseVis = Cursor.visible;
 
         if (Input.GetButtonDown("Cancel")) {
             paused = !paused;

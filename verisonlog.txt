@@ -1,3 +1,13 @@
+v.1.0.0
+05/12/2021
+"Official Release"
+- Added an executable so you can play the game yourself!
+- Added a brief description of how to play and credits
+- Fixed a bug where player wouldn't be teleported to the roof
+- Added small decorations to try and make the game look nicer
+- Fixed a bug which made the final custscene silent
+- Small tweaks to make the game feel more natural
+========================================
 v.0.1.1
 05/12/2021
 "The T-Minus-Ten Version"

@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     SaveData
+	Desc:       Handles storing and retrieving save data and adding them back into the scene (Goes unused)
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */

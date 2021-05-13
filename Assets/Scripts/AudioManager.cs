@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     AudioManager
+	Desc:       Handles all sound effects and music, and is a singleton
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */
@@ -24,6 +23,7 @@ public class AudioManager : MonoBehaviour {
     public bool enabledAudio = true;
 
     private AudioSource music;
+    private AudioSource generator;
 
     #endregion
 
@@ -68,28 +68,54 @@ public class AudioManager : MonoBehaviour {
         }
 
         s.source.Play();
+        Debug.Log("Sound: Played " + name);
         return s.source;
     }
 
-    public void toggleMusic(bool toggle) {
+    public void toggleMusic(bool toggle,bool ending=false) {
         Debug.Log("Music: " + toggle);
         if (toggle) {
-            playMusic();
+            playMusic(ending);
         } else {
             stopMusic();
         }
     }
 
-    public void playMusic() {
-        music = Play("Beat");
+    public void playMusic(bool ending) {
+        if (!enabledAudio)
+            return;
+
+        if (music)
+            stopMusic();
+
+        Debug.Log("Starting music");
+        
+        if (!ending) {
+            music = Play("Beat");
+            Debug.Log(music);
+            return;
+        }
+
+        music = Play("EndMusic");
         Debug.Log(music);
+        return;
     }
 
     public void stopMusic() {
+        Debug.Log("Stopping Music");
         if (!music)
             return;
 
         music.Stop();
+    }
+
+    public void playGenerator() {
+        generator = Play("Generator");
+    }
+
+    public void stopGenerator() {
+        if (generator)
+            generator.Stop();
     }
 
     #endregion

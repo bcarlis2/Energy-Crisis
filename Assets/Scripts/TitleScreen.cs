@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     Title Screen
+	Desc:       Handles button interaction on the main menu
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */
@@ -18,7 +17,10 @@ public class TitleScreen : MonoBehaviour {
 
 	#region Variables
 	
-	
+	[SerializeField] public GameObject howToPlayGO;
+    [SerializeField] public GameObject creditsGO;
+    public bool howToPlay = false;
+    public bool credits = false;
 
     #endregion
 
@@ -31,6 +33,17 @@ public class TitleScreen : MonoBehaviour {
 
         if (player)
             Destroy(player);
+
+        GameObject wrongCamera = GameObject.Find("Main Camera");
+
+        if (wrongCamera)
+            Destroy(wrongCamera);
+
+        AudioManager.instance.stopMusic();
+        AudioManager.instance.playMusic(false); //Stop whatever music is playing and restart main theme
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void Update()
@@ -56,6 +69,20 @@ public class TitleScreen : MonoBehaviour {
         
         AudioManager.instance.toggleMusic(!AudioManager.instance.enabled);
         AudioManager.instance.enabled = !AudioManager.instance.enabled;
+    }
+
+    public void toggleHowToPlay() {
+        howToPlay = !howToPlay;
+        credits = false;
+        howToPlayGO.SetActive(howToPlay);
+        creditsGO.SetActive(false);
+    }
+
+    public void toggleCredits() {
+        credits = !credits;
+        howToPlay = false;
+        creditsGO.SetActive(credits);
+        howToPlayGO.SetActive(false);
     }
 
     public void exitGame() {

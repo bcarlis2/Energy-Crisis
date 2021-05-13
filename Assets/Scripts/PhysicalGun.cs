@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     PhysicalGun
+	Desc:       Handles player picking up gun, places it the player's weapon holder and aligns it with camera view
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */

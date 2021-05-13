@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     StealBattery
+	Desc:       Removes a specific type of battery from the player on interaction, used for power poles and generators
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */

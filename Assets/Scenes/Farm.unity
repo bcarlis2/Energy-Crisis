@@ -4626,7 +4626,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -5968,7 +5968,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -10906,6 +10906,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cineCam: {fileID: 1770519427}
+  mainCam: {fileID: 0}
   cineCanvas: {fileID: 5515221}
   anglesHolder: {fileID: 1603531583}
   credits: {fileID: 238039164}
@@ -17285,6 +17286,7 @@ MonoBehaviour:
   playerMovement: {fileID: 0}
   bm: {fileID: 0}
   playerHealth: {fileID: 0}
+  playerMelee: {fileID: 0}
   text: Go To Road
   canTrigger: 0
   triggerToInteract: 0
@@ -22758,6 +22760,7 @@ MonoBehaviour:
   playerMovement: {fileID: 0}
   bm: {fileID: 0}
   playerHealth: {fileID: 0}
+  playerMelee: {fileID: 0}
   text: Give Car Battery
   canTrigger: 0
   triggerToInteract: 0
@@ -22778,6 +22781,24 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.58, y: 1.34, z: 1.68}
   m_Center: {x: 0.000000029802322, y: 0.38254598, z: 0.008996561}
+--- !u!114 &993095837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 993095831}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 0.73655117, b: 0, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &1007018445
 GameObject:
   m_ObjectHideFlags: 0
@@ -31346,6 +31367,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8951461908280506176, guid: 02d49be86153ae841b12b002328194b9, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8951461908280506177, guid: 02d49be86153ae841b12b002328194b9, type: 3}
       propertyPath: triggerToInteract
       value: 1
@@ -31354,9 +31379,17 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8951461908280506191, guid: 02d49be86153ae841b12b002328194b9, type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8951597693909534225, guid: 02d49be86153ae841b12b002328194b9, type: 3}
       propertyPath: m_Name
       value: pole-electric
+      objectReference: {fileID: 0}
+    - target: {fileID: 9068789943338219269, guid: 02d49be86153ae841b12b002328194b9, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8951461908280506177, guid: 02d49be86153ae841b12b002328194b9, type: 3}
@@ -33196,6 +33229,7 @@ MonoBehaviour:
   playerMovement: {fileID: 0}
   bm: {fileID: 0}
   playerHealth: {fileID: 0}
+  playerMelee: {fileID: 0}
   text: 
   canTrigger: 0
   triggerToInteract: 1
@@ -33263,6 +33297,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1636894874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636894865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 0, g: 1, b: 0.029324532, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &1656081908
 GameObject:
   m_ObjectHideFlags: 0
@@ -45486,6 +45538,7 @@ MonoBehaviour:
   - {fileID: 699701376}
   cineCam: {fileID: 621996545}
   carBattery: {fileID: 1636894867}
+  genOutline: {fileID: 993095837}
 --- !u!1001 &6339381102120233473
 PrefabInstance:
   m_ObjectHideFlags: 0

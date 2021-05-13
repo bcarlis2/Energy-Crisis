@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     MedKit
+	Desc:       Gives health when interacted with
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */

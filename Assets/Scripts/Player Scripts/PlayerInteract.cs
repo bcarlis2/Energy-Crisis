@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     PlayerInteract
+	Desc:       Blueprint for more specific scripts dealing with player pressing E to interact with objects
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */

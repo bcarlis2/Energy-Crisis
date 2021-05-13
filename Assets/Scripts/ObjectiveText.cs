@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     ObjectiveText
+	Desc:       Just used to make element easier to find in Inspector hierachy for certain scripts
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */

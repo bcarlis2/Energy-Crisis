@@ -1,14 +1,12 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     PowerPole
+	Desc:       A type of turret that damages an enemy in trigger range on an interval
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */
-
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -55,7 +53,9 @@ public class PowerPole : MonoBehaviour {
     #region Methods
 
     public void startShocking() {
-        interactable.enabled = false;
+        Debug.Log("PP: Start Shocking");
+        if (interactable)
+            interactable.enabled = false;
         sphereC.enabled = true;
         stop = false;
         pulseLoop();
@@ -63,7 +63,7 @@ public class PowerPole : MonoBehaviour {
     }
 
     public void endShocking() {
-        Debug.Log("Stop Shocking");
+        Debug.Log("PP: Stop Shocking");
         stop = true;
         sphereC.enabled = false;
         this.enabled = false;

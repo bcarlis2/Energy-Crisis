@@ -161,7 +161,7 @@ MonoBehaviour:
       - m_Target: {fileID: 5972345281611655363}
         m_TargetAssemblyTypeName: PlayerMovement, Assembly-CSharp
         m_MethodName: toggleMusic
-        m_Mode: 6
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -197,16 +197,16 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 594302929768386144}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.00002883551}
+  m_LocalPosition: {x: 0, y: 0, z: -0.000028387802}
   m_LocalScale: {x: 9.374996, y: 3.7500029, z: 0.6250014}
   m_Children: []
   m_Father: {fileID: 5972345282888058930}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.000030517578}
-  m_SizeDelta: {x: 100, y: 150}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6152437219864276815
 CanvasRenderer:
@@ -2142,8 +2142,8 @@ CharacterController:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Height: 2
-  m_Radius: 0.5
+  m_Height: 2.63
+  m_Radius: 0.79
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -2262,6 +2262,7 @@ MonoBehaviour:
   guns: []
   enemySpawners: []
   objectiveGUI: {fileID: 2725591948561954745}
+  battery: {fileID: 0}
   currentMissions: []
   checkWeaponSwitcher: 0
   checkBatteryManager: 0
@@ -2522,7 +2523,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -146.09998, y: 7}
+  m_AnchoredPosition: {x: -146.09998, y: 50}
   m_SizeDelta: {x: 287, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5972345282146761458
@@ -2937,6 +2938,8 @@ MonoBehaviour:
   pauseCanvas: {fileID: 3372453966951358424}
   mouseSensitivity: 100
   paused: 0
+  lockState: 0
+  mouseVis: 0
 --- !u!114 &5972345282901334003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3217,7 +3220,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Toggle Battery Names
+  m_text: Toggle Battery Labels
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3291,7 +3294,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 3338452463597825773}
-    characterCount: 20
+    characterCount: 21
     spriteCount: 0
     spaceCount: 2
     wordCount: 3
@@ -4039,6 +4042,7 @@ MonoBehaviour:
   guns: []
   enemySpawners: []
   objectiveGUI: {fileID: 0}
+  battery: {fileID: 0}
   currentMissions: []
   checkWeaponSwitcher: 0
   checkBatteryManager: 0

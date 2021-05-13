@@ -1,4 +1,14 @@
-﻿using System.Collections;
+﻿/*
+	Project:    Energy Crisis
+	
+	Script:     PhysicalBattery
+	Desc:       Handles the trigger on physical batteries, removing all visual attributes on collision and adding battery to the player
+	
+	Credits:	Brandon Carlisle
+	
+*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +18,7 @@ public class PhysicalBattery : MonoBehaviour
     BatteryManager bm;
     BoxCollider realCollider;
     SphereCollider trigger;
-    Rigidbody rgBody;
+    //Rigidbody rgBody;
     Renderer appear;
     Outline outline;
     public bool isPhysical = true;
@@ -21,7 +31,7 @@ public class PhysicalBattery : MonoBehaviour
         battery = GetComponent<Battery>();
         realCollider = GetComponent<BoxCollider>();
         trigger = GetComponent<SphereCollider>();
-        rgBody = GetComponent<Rigidbody>();
+        //rgBody = GetComponent<Rigidbody>();
         appear = GetComponent<Renderer>();
 
         //Adds outline at runtime
@@ -62,8 +72,8 @@ public class PhysicalBattery : MonoBehaviour
                 //Turn off everything that makes it physical
                 trigger.enabled = false;
                 realCollider.enabled = false;
-                rgBody.isKinematic = false;
-                rgBody.useGravity = false;
+                //rgBody.isKinematic = false;
+                //rgBody.useGravity = false;
                 appear.enabled = false;
                 this.enabled = false;
             }

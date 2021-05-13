@@ -1,4 +1,14 @@
-﻿using System.Collections;
+﻿/*
+	Project:    Energy Crisis
+	
+	Script:     BatteryIcons
+	Desc:       Displays batteries as UI elements, updating to reflect the state of the batteries and their charge amount
+	
+	Credits:	Brandon Carlisle
+	
+*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;

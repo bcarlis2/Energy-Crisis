@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     MeleeCharging
+	Desc:       Handles how batteries are charged when getting the final blow on an enemy through melee
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */

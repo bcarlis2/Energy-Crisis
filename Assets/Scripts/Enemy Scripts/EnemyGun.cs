@@ -4,7 +4,6 @@
 	Script:		Enemy Gun
 	Desc:		Aims at and shoots the player
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */

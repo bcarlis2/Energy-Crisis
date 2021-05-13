@@ -100,8 +100,8 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: Hurt
     clip: {fileID: 8300000, guid: 647bbda710c831143a83718fd2bbf49c, type: 3}
-    volume: 0.212
-    pitch: 0.8
+    volume: 1
+    pitch: 2.34
     loop: 0
     source: {fileID: 0}
   - name: Beat
@@ -115,5 +115,17 @@ MonoBehaviour:
     volume: 0.212
     pitch: 0.8
     loop: 0
+    source: {fileID: 0}
+  - name: EndMusic
+    clip: {fileID: 8300000, guid: b36d8dbdc4f2e6c4d80490173bca3f90, type: 3}
+    volume: 0.212
+    pitch: 0.8
+    loop: 1
+    source: {fileID: 0}
+  - name: Generator
+    clip: {fileID: 8300000, guid: c5570e6705a594345a5ce0de0e75058f, type: 3}
+    volume: 0.701
+    pitch: 0.19
+    loop: 1
     source: {fileID: 0}
   enabledAudio: 1

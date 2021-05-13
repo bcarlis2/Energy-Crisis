@@ -1,4 +1,14 @@
-﻿using System.Collections;
+﻿/*
+	Project:    Energy Crisis
+	
+	Script:     EnemyMovement
+	Desc:       Handles enemy pathfinding and states as they wander, move towards player, attack, and stop
+	
+	Credits:	Brandon Carlisle
+	
+*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;

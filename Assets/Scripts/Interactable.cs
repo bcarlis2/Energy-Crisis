@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     Interactable
+	Desc:       Handles trigger which activates player's interact UI
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */
@@ -23,6 +22,7 @@ public class Interactable : MonoBehaviour {
     public PlayerMovement playerMovement;
     public BatteryManager bm;
     public PlayerHealth playerHealth;
+    public PlayerMelee playerMelee;
     //Renderer renderer;
     //Camera camera;
     public string text;
@@ -76,6 +76,7 @@ public class Interactable : MonoBehaviour {
                 bm = playerObj.GetComponentInChildren<BatteryManager>();
                 playerMovement = playerObj.GetComponent<PlayerMovement>();
                 playerHealth = playerObj.GetComponent<PlayerHealth>();
+                playerMelee = playerObj.GetComponent<PlayerMelee>();
             }
 
             if (tellMM && mm) {

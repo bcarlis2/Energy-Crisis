@@ -1,4 +1,14 @@
-﻿using System.Collections;
+﻿/*
+	Project:    Energy Crisis
+	
+	Script:     PlayerMovement
+	Desc:       Handles player movement, sprinting, jumping, and spawn locations and audio toggling since this is also a singleton
+	
+	Credits:	Brandon Carlisle
+	
+*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -58,6 +68,18 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
 
+            if (_instance.secondSpawn) {
+                if (_instance.secondSpawnLoc == null) {
+                        _instance.secondSpawnLoc = GameObject.FindGameObjectWithTag("SecondSpawn").transform;
+                        secondSpawnLoc = _instance.secondSpawnLoc;
+                }
+                //secondSpawnLoc = getSecondSpawn();
+                Debug.Log("Spawn: Second Loc From Beginning of Awake: " + secondSpawnLoc);
+                _instance.transform.position = secondSpawnLoc.position; //Places the player at the door
+                _instance.transform.rotation = secondSpawnLoc.rotation;
+                //secondSpawn = false;
+        }
+
             Destroy(this.gameObject);
         } else {
             Debug.Log("Else");
@@ -69,9 +91,12 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("This secondSpawn = " + secondSpawn);
 
         if (_instance.secondSpawn) {
-            secondSpawnLoc = GameObject.FindGameObjectWithTag("SecondSpawn").transform;
+            if (_instance.secondSpawnLoc == null) {
+                    _instance.secondSpawnLoc = GameObject.FindGameObjectWithTag("SecondSpawn").transform;
+                    secondSpawnLoc = _instance.secondSpawnLoc;
+            }
             //secondSpawnLoc = getSecondSpawn();
-            Debug.Log("Spawn: Second Loc: " + secondSpawnLoc);
+            Debug.Log("Spawn: Second Loc From End of Awake: " + secondSpawnLoc);
             _instance.transform.position = secondSpawnLoc.position; //Places the player at the door
             _instance.transform.rotation = secondSpawnLoc.rotation;
             //secondSpawn = false;
@@ -81,6 +106,18 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+        if (_instance.secondSpawn) {
+            if (_instance.secondSpawnLoc == null) {
+                    _instance.secondSpawnLoc = GameObject.FindGameObjectWithTag("SecondSpawn").transform;
+                    secondSpawnLoc = _instance.secondSpawnLoc;
+            }
+            //secondSpawnLoc = getSecondSpawn();
+            Debug.Log("Spawn: Second Loc From Start: " + secondSpawnLoc);
+            _instance.transform.position = secondSpawnLoc.position; //Places the player at the door
+            _instance.transform.rotation = secondSpawnLoc.rotation;
+            //secondSpawn = false;
+        }
+
         canMove = true;
     }
 
@@ -103,7 +140,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 move = transform.right * x + transform.forward * z;
 
         if (Input.GetButton("Sprint") && isGrounded) {
-            Debug.Log("Sprinting");
+            //Debug.Log("Sprinting");
             moveSpeed = sprintSpeed;
         } else {
             moveSpeed = speed;

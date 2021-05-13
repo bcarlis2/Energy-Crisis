@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     MissionLevelFinal
+	Desc:       The objectives for the final level on the Farm
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */
@@ -23,6 +22,7 @@ public class MissionsLevelFinal : MissionManager {
     [SerializeField] EnemySpawner[] spawners;
     [SerializeField] CinemaCam cineCam;
     [SerializeField] Battery carBattery;
+    [SerializeField] Outline genOutline;
 
     #endregion
 
@@ -63,6 +63,7 @@ public class MissionsLevelFinal : MissionManager {
     void StartMission22() {
         objectiveGUI.SetText("Put the battery in the generator");
         
+        genOutline.enabled = true;
         currentMissions.Add(new Mission(Mission.MissionType.Interact,Mission.CheckComponent.Interactable,0,1)); //Interact Mission
 
         missionNumber = 22;
@@ -82,7 +83,9 @@ public class MissionsLevelFinal : MissionManager {
             spawner.stopSpawnInfinite();
             spawner.spawn(1);
         }
-
+        
+        genOutline.enabled = false;
+        AudioManager.instance?.playGenerator();
         currentMissions.Add(new Mission(Mission.MissionType.WipeSpawner,Mission.CheckComponent.EnemySpawner,0,spawners.Length));
 
         missionNumber = 3;
@@ -108,6 +111,7 @@ public class MissionsLevelFinal : MissionManager {
     }
 
     void cutscene() {
+        AudioManager.instance?.stopGenerator();
         cineCam.enabled = true;
     }
 

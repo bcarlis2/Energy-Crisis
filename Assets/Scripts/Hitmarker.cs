@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     Hitmarker
+	Desc:       Quick animation for whenever player successfully shoots an enemy
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */

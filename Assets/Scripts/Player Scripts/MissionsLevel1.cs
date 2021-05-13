@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     MissionLevel1
+	Desc:       The objectives for the tutorial level in the Warehouse
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */
@@ -97,7 +96,7 @@ public class MissionsLevel1 : MissionManager {
     }
 
     void StartMission4() {
-        objectiveGUI.SetText("Go outside through front door when you are ready");
+        objectiveGUI.SetText("Charge up and go outside through front door when you're ready");
 
         door.GetComponent<Outline>().enabled = true;
         door.GetComponent<Door>().enabled = true;

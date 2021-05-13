@@ -2,7 +2,7 @@
 	Project:    Energy Crisis
 	
 	Script:     EnemyBullet
-	Desc:       Handles damaging the player as well as despawning the bullets
+	Desc:       Handles damaging the player as well as despawning the bullets (Goes unused)
 	
 	Credits:	Brandon Carlisle
 	

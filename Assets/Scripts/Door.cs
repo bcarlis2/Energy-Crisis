@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     Door
+	Desc:       Interactable object that can open a door with an animation and load a specified scene
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */
@@ -30,6 +29,7 @@ public class Door : Interactable {
     {
         if (warehouseDoor && PlayerMovement._instance.secondSpawn) {
             base.changeText("Go To Roof");
+            secondLoc = true;
         }
         //renderer = this.gameObject.GetComponent<Renderer>();
     }
@@ -60,6 +60,7 @@ public class Door : Interactable {
             //base.playerMovement.setSpawn(scene,secondLoc);
             base.playerMovement.secondSpawn = secondLoc;
             base.playerMovement.changeMissions = changeMissions;
+            base.playerMelee.stopMelee(); //Stops melee UI from staying on screen
             SceneManager.LoadScene(scene);
         }
 

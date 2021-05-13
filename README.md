@@ -2,6 +2,6 @@
 ## An FPS game about managing energy!
 
 
-v.0.1.1
-"The T-Minus-Ten Version"
+v.1.0.0
+"Official Release"
 05/12/2021

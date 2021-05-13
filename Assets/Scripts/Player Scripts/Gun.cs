@@ -1,3 +1,13 @@
+/*
+	Project:    Energy Crisis
+	
+	Script:     Gun
+	Desc:       Handles player gun firing and battery draining
+	
+	Credits:	Brandon Carlisle
+	
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -142,7 +152,7 @@ public class Gun : MonoBehaviour
         if (battery && oldBattery && battery != oldBattery) {
             //Debug.Log("SWAPPING " + oldBattery.toString() + " FOR " + battery.toString());
             oldBattery.changeState(BatteryManager.State.Inventory);
-            //nextTimeToFire = 0f; //No cooldown if you reload?
+            nextTimeToFire = 0f; //No cooldown if you reload?
         }
 
         if (tellMM && mm) {

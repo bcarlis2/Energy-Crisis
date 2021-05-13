@@ -22,7 +22,7 @@ public class PlayerHealth : MonoBehaviour {
     [SerializeField] PlayerMovement playerMovement;
     [SerializeField] TextMeshProUGUI healthGUI;
     PlayerMelee playerMelee;
-    Color[] healthColors = new Color[3];
+    Color[] healthColors = new Color[4];
 
 	int health = 100;
     int maxHealth = 100;
@@ -44,6 +44,7 @@ public class PlayerHealth : MonoBehaviour {
         healthColors[0] = Color.white;
         healthColors[1] = new Color(1,0.6f,0.2f); //Orange
         healthColors[2] = Color.red;
+        healthColors[3] = Color.green;
     }
 
     public void Update()
@@ -73,9 +74,15 @@ public class PlayerHealth : MonoBehaviour {
     public void giveHealth(int amount) {
         if ((health + amount) > maxHealth) {
             setHealth(maxHealth);
+            //Simple color animation
+            healthGUI.color = healthColors[3];
+            Invoke(nameof(setHealthColor),0.5f);
             return;
         }
         setHealth(health + amount);
+        //Simple color animation
+        healthGUI.color = healthColors[3];
+        Invoke(nameof(setHealthColor),0.5f);
     }
 	
 	public void takeDamage(int damage) {
@@ -119,6 +126,7 @@ public class PlayerHealth : MonoBehaviour {
 
         playerMovement.canMove = false;
         //playerMovement.enabled = false; //Is it a bad idea to disable the whole script?
+        GetComponentInChildren<MissionManager>().setText("You Died");
 
         Invoke(nameof(restart), 5); //Restarts scene 5 seconds after death, only called once!
     }
@@ -126,7 +134,7 @@ public class PlayerHealth : MonoBehaviour {
     private void restart() {
         //SaveData.instance?.Load();
         //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("TitleScreen");
     }
 
     #endregion

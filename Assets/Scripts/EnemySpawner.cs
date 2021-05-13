@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     EnemySpawner
+	Desc:       Spawns a specified number of enemies within the bounds of the game object
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */

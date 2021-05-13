@@ -9,6 +9,16 @@
 	
 */
 
+/*
+	Project:    Energy Crisis
+	
+	Script:     MissionManager
+	Desc:       Blueprint for more specific mission scripts, handles mission types, components needed, and completion events
+	
+	Credits:	Brandon Carlisle
+	
+*/
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -400,6 +410,10 @@ public class MissionManager : MonoBehaviour {
 
     void NoMission() {
         objectiveGUI.SetText("No Mission");
+    }
+
+    public void setText(string text) {
+        objectiveGUI.SetText(text);
     }
 
 

@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     PlayerMelee
+	Desc:       Handles player melee, lock-on, animation, buffer, and killing blows
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */

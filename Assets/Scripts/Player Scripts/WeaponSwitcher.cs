@@ -1,4 +1,14 @@
-﻿using System.Collections;
+﻿/*
+	Project:    Energy Crisis
+	
+	Script:     WeaponSwitcher
+	Desc:       Swaps weapons depending on children of this object
+	
+	Credits:	Brandon Carlisle
+	
+*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -49,9 +59,11 @@ public class WeaponSwitcher : MonoBehaviour
             Invoke(nameof(refreshSwitch),0.25f);
         }
 
+        /* A cheat which lets you fill all batteries
         if (Input.GetButtonDown("FillAll")) {
             bm.fillAllBatteries();
         }
+        */
 
         //Pressing the 1 or 2 key gets the first or second weapon, may expand later
         if (Input.GetKeyDown(KeyCode.Alpha1)) {

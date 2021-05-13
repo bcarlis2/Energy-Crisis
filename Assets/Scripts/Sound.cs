@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     Sound
+	Desc:       Hold properties for sound effects and music for AudioManager
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */

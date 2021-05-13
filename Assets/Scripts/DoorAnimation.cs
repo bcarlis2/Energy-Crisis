@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     DoorAnimation
+	Desc:       Swings open a door, used only in the Office
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */

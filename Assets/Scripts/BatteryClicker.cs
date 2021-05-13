@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     BatteryClicker
+	Desc:       Swaps batteries in inventory based on UI element clicks
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */

@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     CinemaCam
+	Desc:       Handles the final cutscene of the game
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */
@@ -19,6 +18,7 @@ public class CinemaCam : MonoBehaviour {
 	#region Variables
 	
 	[SerializeField] Camera cineCam;
+    [SerializeField] Camera mainCam;
     [SerializeField] Canvas cineCanvas;
     [SerializeField] Transform anglesHolder;
     [SerializeField] GameObject credits;
@@ -41,6 +41,7 @@ public class CinemaCam : MonoBehaviour {
         startCinema();
         cineCam.enabled = true;
         cineCanvas.enabled = true;
+        AudioManager.instance?.toggleMusic(true,true);
         loopThrough();
     }
 
@@ -70,6 +71,11 @@ public class CinemaCam : MonoBehaviour {
     private void hidePlayer() {
         playerMovement = PlayerMovement._instance;
         playerMovement.playerCanvas.SetActive(false);
+        mainCam = playerMovement.GetComponentInChildren<Camera>();
+        mainCam.gameObject.transform.SetParent(null); //Keep camera active for audio listener
+        mainCam.enabled = false;
+        mainCam.transform.GetChild(0).gameObject.SetActive(false); //Turn off guns so you can't shoot at end screen (though that's fun too)
+
         playerMovement.gameObject.SetActive(false);
     }
 

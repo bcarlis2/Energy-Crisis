@@ -1,10 +1,9 @@
 ﻿/*
-	Project:	
+	Project:    Energy Crisis
 	
-	Script:		
-	Desc:		
+	Script:     MissionLevel2
+	Desc:       The objectives for first time entering the Alleyway
 	
-	Last Edit:	
 	Credits:	Brandon Carlisle
 	
 */
